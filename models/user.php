@@ -1,7 +1,12 @@
 <?php 
 class User{
-    public function __construct(){
+    private string $vnev;
+    private string $knev;
+    private string $telefonszam;
+    
 
+    public function __construct(string $emailcim, string $jelszo){
+        $stmt="";
     }
     public function IdoPontFogalalasa(){
 
@@ -9,6 +14,9 @@ class User{
     public function IdoPontTorlese(){
         
     } 
+    public function AdatokModositasa(){
+
+    }
 
 
 }
