@@ -5,8 +5,8 @@ class User{
     private string $telefonszam;
     
 
-    public function __construct(){
-
+    public function __construct(string $emailcim, string $jelszo){
+        $stmt="";
     }
     public function IdoPontFogalalasa(){
 

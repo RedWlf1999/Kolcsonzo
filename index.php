@@ -12,7 +12,7 @@
     <ul>
         <li><a href="pages/login.php">Bejelentkezés</a></li>
         <li><a href="pages/regisztracio.php">Regisztráció</a></li>
-        <li><a href=#>Foglalás</a></li>
+        <li><a href="pages/kolcsonzes.php">Foglalás</a></li>
         <li><a href=#>Kapcsolat</a></li>
     </ul>
 </body>
