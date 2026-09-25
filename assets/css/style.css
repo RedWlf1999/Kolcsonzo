@@ -1,0 +1,48 @@
+
+:root {
+    --primary: #1f58a3;
+    --bg: #FFFFFF;
+    --radius: 10px;
+    --radius-btn: 6px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+    background: var(--bg);
+    color: #1F2937;
+    line-height: 1.5;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: var(--radius-btn);
+    font: inherit;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
