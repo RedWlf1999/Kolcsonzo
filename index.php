@@ -1,19 +1,9 @@
 <?php
-    session_start();
+$pageTitle = 'Főoldal';
+include __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autó kölcsönző</title>
-</head>
-<body>
-    <ul>
-        <li><a href="pages/login.php">Bejelentkezés</a></li>
-        <li><a href="pages/regisztracio.php">Regisztráció</a></li>
-        <li><a href="pages/kolcsonzes.php">Foglalás</a></li>
-        <li><a href=#>Kapcsolat</a></li>
-    </ul>
-</body>
-</html>
+
+<main class="page">
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quod blanditiis rerum, veniam accusantium voluptas, excepturi quaerat tenetur asperiores ratione nihil facilis tempore aliquam? Id, modi quidem. Doloribus, architecto commodi culpa at cupiditate asperiores inventore libero eius, obcaecati iusto atque aliquid distinctio ipsam eos quasi? Commodi cupiditate assumenda eum eveniet.</p>
+</main>
