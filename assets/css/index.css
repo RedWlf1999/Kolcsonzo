@@ -1,0 +1,107 @@
+
+.page section + section {
+    margin-top: 80px;
+}
+
+.page h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin: 0 0 40px;
+}
+
+
+.hero {
+    text-align: center;
+    padding: 64px 24px;
+    background: #F4F6F9;
+    border-radius: var(--radius);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin: 0 0 12px;
+    color: var(--primary);
+}
+
+.hero p {
+    font-size: 1.15rem;
+    color: #6B7280;
+    margin: 0 0 32px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+}
+
+.step {
+    text-align: center;
+}
+
+.step img {
+    width: 100%;
+    max-width: 180px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 16px;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.step h3 {
+    margin: 0 0 8px;
+}
+
+.step p {
+    color: #6B7280;
+    margin: 0;
+}
+
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+}
+
+.feature {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.feature img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.feature h3 {
+    margin: 0 0 6px;
+}
+
+.feature p {
+    color: #6B7280;
+    margin: 0;
+}

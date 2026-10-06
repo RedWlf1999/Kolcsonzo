@@ -1,6 +1,12 @@
 <?php
+    $pageTitle = 'Kölcsönzés';
+    include __DIR__ . '/../includes/header.php';
+
+    if (session_status() === PHP_SESSION_NONE) {
     session_start();
+    }
     foglalas();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,3 +24,6 @@
 function foglalas(){
     
 }
+?>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>

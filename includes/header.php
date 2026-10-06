@@ -1,9 +1,14 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
 
-    $szerepKor = $_SESSION['role'] ?? null;
-    $bejelentkezettNev = $_SESSION['name'] ?? '';
-    
+function e($szoveg) {
+    return htmlspecialchars((string) $szoveg);
+}
+
+$szerepKor = $_SESSION['role'] ?? null;
+$bejelentkezettNev = $_SESSION['name'] ?? '';
 ?>
 
 
@@ -18,6 +23,11 @@
         <link rel="stylesheet" href="/Kolcsonzo/assets/css/layout.css">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+        <?php if (!empty($pageCss)): ?>
+    <link rel="stylesheet" href="/Kolcsonzo/assets/css/<?= $pageCss ?>">
+        <?php endif; ?>
+        
     </head>
     <body>
         <header class="site-header">
@@ -31,7 +41,7 @@
                     <?php else: ?>
                         <a href="/Kolcsonzo/pages/jarmuvek.php">Járművek</a>
                         <a href="/Kolcsonzo/pages/kolcsonzes.php">Kölcsönzés</a>
-                        <a href="Kolcsonzo/pages/foglalasaim.php">Foglalásaim</a>
+                        <a href="/Kolcsonzo/pages/foglalasaim.php">Foglalásaim</a>
                         <a href="#">Kapcsolat</a>
                     <?php endif; ?> 
                 </nav>
@@ -47,6 +57,3 @@
 
                 </div>
         </header>
-    </body>
-
-</html>
