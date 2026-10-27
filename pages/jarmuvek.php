@@ -130,7 +130,7 @@ include __DIR__ . '/../includes/header.php';
                             <p class="car-category"><?= e($auto->getKategoria()) ?></p>
                             <h3><?= e($auto->getTeljesNev()) ?></h3>
                         </div>
-                        <span class="btn-accent">Bérlés <i class="fa-solid fa-chevron-right"></i></span>
+                        <span class="btn-accent">Megtekintés <i class="fa-solid fa-chevron-right"></i></span>
                     </div>
 
                     <img src="/Kolcsonzo/assets/pics/cars/<?= e($auto->getKep()) ?>" alt="<?= e($auto->getTeljesNev()) ?>">

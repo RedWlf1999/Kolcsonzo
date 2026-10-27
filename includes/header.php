@@ -7,6 +7,10 @@ function e($szoveg) {
     return htmlspecialchars((string) $szoveg);
 }
 
+function aktivMenu(array $oldalak): string {
+    return in_array($_SERVER['PHP_SELF'], $oldalak) ? 'active' : '';
+}
+
 $szerepKor = $_SESSION['role'] ?? null;
 $bejelentkezettNev = $_SESSION['name'] ?? '';
 ?>
@@ -31,17 +35,16 @@ $bejelentkezettNev = $_SESSION['name'] ?? '';
     </head>
     <body>
         <header class="site-header">
-                <a href="/Kolcsonzo/index.php" class="brand"><img src="/Kolcsonzo/assets/pics/logo.png" alt="">Autókölcsönző</a>
+                <a href="<?= $szerepKor === 'admin' ? '/Kolcsonzo/pages/admin/index.php' : '/Kolcsonzo/index.php' ?>" class="brand"><img src="/Kolcsonzo/assets/pics/logo.png" alt="">Autókölcsönző</a>
 
                 <nav class="main-nav">
                     <?php if ($szerepKor === 'admin'): ?>
-                        <a href="/Kolcsonzo/pages/admin/index.php">Áttekintés</a>
-                        <a href="/Kolcsonzo/pages/admin/jarmuvek.php">Járművek</a>
-                        <a href="/Kolcsonzo/pages/admin/foglalasok.php">Foglalások</a>
+                        <a href="/Kolcsonzo/pages/admin/jarmuvek.php" class="<?= aktivMenu(['/Kolcsonzo/pages/admin/jarmuvek.php', '/Kolcsonzo/pages/admin/jarmu-szerkesztes.php']) ?>">Járművek</a>
+                        <a href="/Kolcsonzo/pages/admin/foglalasok.php" class="<?= aktivMenu(['/Kolcsonzo/pages/admin/foglalasok.php', '/Kolcsonzo/pages/admin/foglalas.php']) ?>">Foglalások</a>
                     <?php else: ?>
-                        <a href="/Kolcsonzo/pages/jarmuvek.php">Járművek</a>
-                        <a href="/Kolcsonzo/pages/kolcsonzes.php">Kölcsönzés</a>
-                        <a href="/Kolcsonzo/pages/foglalasaim.php">Foglalásaim</a>
+                        <a href="/Kolcsonzo/pages/jarmuvek.php" class="<?= aktivMenu(['/Kolcsonzo/pages/jarmuvek.php', '/Kolcsonzo/pages/jarmu.php']) ?>">Járművek</a>
+                        <a href="/Kolcsonzo/pages/kolcsonzes.php" class="<?= aktivMenu(['/Kolcsonzo/pages/kolcsonzes.php']) ?>">Kölcsönzés</a>
+                        <a href="/Kolcsonzo/pages/foglalasaim.php" class="<?= aktivMenu(['/Kolcsonzo/pages/foglalasaim.php']) ?>">Foglalásaim</a>
                         <a href="#">Kapcsolat</a>
                     <?php endif; ?> 
                 </nav>
