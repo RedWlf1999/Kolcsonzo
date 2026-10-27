@@ -1,9 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #304460;
-    --bg: #FFFFFF;
-    --radius: 10px;
-    --radius-btn: 6px;
+    --primary: #1F2D3D;
+    --primary-2: #304460;
+    --accent: #E0951F;
+    --accent-hover: #C98316;
+    --accent-ink: #9A5B0B;
+    --bg: #F2F2EF;
+    --surface: #FFFFFF;
+    --line: #E1E3E6;
+    --text: #1A2230;
+    --muted: #5E6978;
+    --radius: 6px;
+    --radius-btn: 4px;
 }
 
 * {
@@ -12,10 +21,18 @@
 
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: 'Manrope', Arial, sans-serif;
+    font-size: 16px;
     background: var(--bg);
-    color: #1F2937;
+    color: var(--text);
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
 }
 
 a {
@@ -31,18 +48,58 @@ input {
     width: 100%;
     padding: 12px 14px;
     margin-bottom: 14px;
-    border: 1px solid #D1D5DB;
+    border: 1px solid #CDD1D6;
     border-radius: var(--radius-btn);
+    background: #fff;
     font: inherit;
+    color: var(--text);
 }
 
-input:focus {
+input:focus,
+select:focus,
+textarea:focus {
     outline: none;
     border-color: var(--primary);
-    
+    box-shadow: 0 0 0 3px rgba(224, 149, 31, 0.25);
 }
 
 button {
     font: inherit;
     cursor: pointer;
+}
+
+/* ===== Gombok ===== */
+.btn-primary,
+.btn-secondary {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: var(--radius-btn);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-primary {
+    border: none;
+    background: var(--accent);
+    color: var(--primary);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: #fff;
+    text-decoration: none;
 }

@@ -1,0 +1,194 @@
+/* ===== Az oldal teteje ===== */
+.my-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.my-head h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== Visszajelző üzenet ===== */
+.notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    background: #FFF7EA;
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-btn);
+    color: #6B4208;
+}
+
+.group-title {
+    margin: 32px 0 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+}
+
+/* ===== Egy foglalás ===== */
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.booking-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.booking-item img {
+    width: 150px;
+    height: 96px;
+    flex-shrink: 0;
+    padding: 8px;
+    object-fit: contain;
+    background: linear-gradient(180deg, #F7F7F5, #ECEDEA);
+    border-radius: var(--radius-btn);
+}
+
+.booking-info {
+    flex: 1;
+}
+
+.booking-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.booking-title h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.booking-meta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+}
+
+.booking-meta i {
+    margin-right: 4px;
+    color: var(--muted);
+}
+
+.booking-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    text-align: right;
+}
+
+.booking-side strong {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.btn-cancel {
+    padding: 8px 14px;
+    border: 1px solid #E3A0A0;
+    border-radius: var(--radius-btn);
+    background: #fff;
+    color: #A61B1B;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #FBEAEA;
+}
+
+@media (max-width: 640px) {
+    .booking-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .booking-item img {
+        width: 100%;
+    }
+    .booking-side {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* ===== Státuszjelzők ===== */
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.badge-fuggoben    { background: #FCEFD6; color: #7A4A06; }
+.badge-jovahagyva  { background: #DDE7F3; color: #1F3F66; }
+.badge-folyamatban { background: #DCEFE2; color: #1D5B33; }
+.badge-lezarva     { background: #ECEDEF; color: #4A5260; }
+.badge-lemondva    { background: #F6E0E0; color: #8A1C1C; }
+
+/* ===== Ha nincs foglalás ===== */
+.empty-state {
+    padding: 64px 16px;
+    text-align: center;
+    background: #fff;
+    border: 1px dashed #CDD1D6;
+    border-radius: var(--radius);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #9AA3AF;
+}
+
+.empty-state h2 {
+    margin: 16px 0 8px;
+    color: var(--primary);
+}
+
+.empty-state p {
+    margin: 0 0 20px;
+    color: var(--muted);
+}

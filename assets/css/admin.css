@@ -1,0 +1,502 @@
+.admin-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-head h1 {
+    margin: 0;
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.admin-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* ===== Visszajelző üzenet ===== */
+.notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    background: #FFF7EA;
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-btn);
+    color: #6B4208;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+@media (max-width: 1000px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr; }
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: inherit;
+}
+
+a.stat:hover {
+    text-decoration: none;
+    border-color: var(--primary);
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--primary);
+}
+
+.stat span {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    background: #ECEEF1;
+    font-size: 1.2rem;
+}
+
+.stat .stat-icon  { color: var(--primary); }
+.stat .stat-green { background: #DCEFE2; color: #1D5B33; }
+.stat .stat-amber { background: #FCEFD6; color: #7A4A06; }
+.stat .stat-blue  { background: #DDE7F3; color: #1F3F66; }
+
+.panel {
+    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.panel-head h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.panel-head a {
+    font-weight: 600;
+}
+
+/* ===== Kereső sor ===== */
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.toolbar input {
+    max-width: 360px;
+    height: 42px;
+    margin: 0;
+    padding: 0 12px;
+}
+
+.toolbar .btn-secondary {
+    height: 42px;
+    padding: 0 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+/* ===== Táblázat ===== */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.data-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    color: var(--muted);
+    border-bottom: 2px solid var(--primary);
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+    background: #FAFAF8;
+}
+
+.data-table .sub {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.thumb {
+    width: 76px;
+    height: 50px;
+    padding: 4px;
+    object-fit: contain;
+    background: #F4F5F2;
+    border-radius: var(--radius-btn);
+}
+
+.col-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.inline-form {
+    display: inline;
+}
+
+/* Kattintható sor */
+.data-table .row-link {
+    cursor: pointer;
+}
+
+.data-table .row-link:hover {
+    background: #F4F5F2;
+}
+
+.btn-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    margin-left: 4px;
+    border: 1px solid #CDD1D6;
+    border-radius: var(--radius-btn);
+    background: #fff;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+}
+
+.btn-sm:hover {
+    background: #F4F5F2;
+    text-decoration: none;
+}
+
+.btn-danger {
+    border-color: #E3A0A0;
+    color: #A61B1B;
+}
+
+.btn-danger:hover {
+    background: #FBEAEA;
+}
+
+.btn-success {
+    border-color: #9FCBAE;
+    color: #1D5B33;
+}
+
+.btn-success:hover {
+    background: #E6F3EA;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.badge-fuggoben    { background: #FCEFD6; color: #7A4A06; }
+.badge-jovahagyva  { background: #DDE7F3; color: #1F3F66; }
+.badge-folyamatban { background: #DCEFE2; color: #1D5B33; }
+.badge-lezarva     { background: #ECEDEF; color: #4A5260; }
+.badge-lemondva    { background: #F6E0E0; color: #8A1C1C; }
+
+.badge-lg {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+}
+
+.status-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.status-tabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    margin-bottom: -1px;
+    border-bottom: 3px solid transparent;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.status-tabs a:hover {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.status-tabs a.active {
+    border-bottom-color: var(--accent);
+    color: var(--primary);
+}
+
+.status-tabs .count {
+    padding: 0 7px;
+    border-radius: 3px;
+    background: #ECEDEF;
+    font-size: 0.75rem;
+    color: var(--text);
+}
+
+.status-tabs a.active .count {
+    background: var(--primary);
+    color: #fff;
+}
+
+.empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.admin-form h2 {
+    margin: 0 0 16px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.admin-form h2:not(:first-child) {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.admin-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+    width: 100%;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #CDD1D6;
+    border-radius: var(--radius-btn);
+    background: #fff;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--text);
+}
+
+.admin-form input,
+.admin-form select {
+    height: 46px;
+}
+
+.admin-form input[type="file"] {
+    height: auto;
+    padding: 10px;
+}
+
+.image-field {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.image-field label {
+    flex: 1;
+}
+
+.image-preview {
+    width: 140px;
+    height: 90px;
+    padding: 6px;
+    object-fit: contain;
+    background: #F4F5F2;
+    border-radius: var(--radius-btn);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 1000px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.panel-title {
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.detail-car-img {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+    object-fit: contain;
+    background: linear-gradient(180deg, #F7F7F5, #ECEDEA);
+    border-radius: var(--radius-btn);
+}
+
+.detail-car-name {
+    margin: 12px 0 2px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.detail-grid .sub {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--muted);
+}
+
+.detail-grid .btn-sm {
+    margin-left: 0;
+}
+
+.detail-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 0;
+    margin: 0;
+}
+
+.detail-list dt {
+    padding-right: 16px;
+    color: var(--muted);
+}
+
+.detail-list dd {
+    margin: 0;
+    text-align: right;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.detail-list .detail-total {
+    padding-top: 10px;
+    border-top: 2px solid var(--primary);
+}
+
+.detail-list dd.detail-total {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.detail-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
