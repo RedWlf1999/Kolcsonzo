@@ -2,11 +2,15 @@
 class User{
     private string $vnev;
     private string $knev;
+    private string $email;
     private string $telefonszam;
     
 
-    public function __construct(string $emailcim, string $jelszo){
-        $stmt="";
+    public function __construct(string $vnev,string $knev,string $email, string $telefonszam){
+        $this->vnev=$vnev;
+        $this->knev=$knev;
+        $this->email=$email;
+        $this->telefonszam=$telefonszam;
     }
     public function IdoPontFogalalasa(){
 
@@ -16,6 +20,9 @@ class User{
     } 
     public function AdatokModositasa(){
 
+    }
+    public function FeltoltDB(){
+        
     }
 
 

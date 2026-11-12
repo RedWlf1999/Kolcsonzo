@@ -1,13 +1,11 @@
 <?php
-$servername = "";
-$username = "";
-$password = "";
-$dbname = "";
 
-// kapcsolódás
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+ $host="localhost";
+ $user="root";
+ $pass="";
+ $db="kolcsonzo";
 
-// checkoljuk létrejött-e a kapcsolat
-if (!$conn) {
-    die("Sikertelen kapcsolódás: " . mysqli_connect_error());
+ $conn=mysqli_connect($host,$user,$pass,$db);
+ if(!$conn){
+    echo "hiba";
 }

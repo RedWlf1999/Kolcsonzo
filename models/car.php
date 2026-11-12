@@ -1,6 +1,6 @@
 <?php
 class Car{
-    private int $id;
+    private string $rendszam;
     private string $marka;
     private string $modell;
     private string $kategoria;
@@ -11,15 +11,15 @@ class Car{
     private string $valto;
     private string $uzemanyag;
     private int $ev;
-    private string $fogyasztas;
+    private float $fogyasztas;
     private string $leiras;
 
     public function __construct(
-        int $id, string $marka, string $modell, string $kategoria, string $kep,
+        string $rendszam, string $marka, string $modell, string $kategoria, string $kep,
         int $ar, int $ulesek, int $csomagter, string $valto, string $uzemanyag,
-        int $ev, string $fogyasztas, string $leiras
+        int $ev, float $fogyasztas, string $leiras
     ) {
-        $this->id = $id;
+        $this->rendszam = $rendszam;
         $this->marka = $marka;
         $this->modell = $modell;
         $this->kategoria = $kategoria;
@@ -35,7 +35,7 @@ class Car{
     }
 
     //Getterek
-    public function getId(): int            {return $this->id; }
+    public function getRndsz(): string      {return $this->rendszam; }
     public function getMarka(): string      {return $this->marka;}
     public function getModell(): string     {return $this->modell;}
     public function getKategoria(): string  {return $this->kategoria;}
@@ -46,35 +46,35 @@ class Car{
     public function getValto(): string      {return $this->valto;}
     public function getUzemanyag(): string  {return $this->uzemanyag;}
     public function getEv(): int            {return $this->ev;}
-    public function getFogyasztas(): string {return $this->fogyasztas;}
+    public function getFogyasztas(): float {return $this->fogyasztas;}
     public function getLeiras(): string     {return $this->leiras;}
 
-    public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell; }
+    public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
 
-    public static function osszes(): array {
+    /*public static function osszes(): array {
         return [
-            new Car(id: 1, marka: 'teszt', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test1', marka: 'teszt', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 12000, ulesek: 5, csomagter: 380, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2022, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 2, marka: 'teszt2', modell: 'teszt2', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test2', marka: 'teszt2', modell: 'teszt2', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 15000, ulesek: 5, csomagter: 400, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2024, fogyasztas: '7,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 3, marka: 'teszt3', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test3', marka: 'teszt3', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 12000, ulesek: 5, csomagter: 380, valto: 'Automata', uzemanyag: 'Dízel',
                     ev: 2022, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 4, marka: 'teszt4', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test4', marka: 'teszt4', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 10000, ulesek: 5, csomagter: 380, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2020, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
 
-            new Car(id: 5, marka: 'teszt5', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test5', marka: 'teszt5', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 20000, ulesek: 5, csomagter: 380, valto: 'Automata', uzemanyag: 'Dízel',
                     ev: 2026, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.')
@@ -90,5 +90,6 @@ class Car{
         }
         return null;
     }
+        */
 
 }

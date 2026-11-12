@@ -1,12 +1,15 @@
 <?php
 class Admin{
-    private string $vnev;
-    private string $knev;
+    private string $email;
+    private string $jelszo;
     private string $telefonszam;
     private array $workers=[];
 
 
-    public function __construct(){
+    public function __construct(string $email,
+                                string $jelszo,
+                                ){
+        
 
     }
     public function UjAutoRogzitese(){

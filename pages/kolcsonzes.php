@@ -1,13 +1,18 @@
 <?php
-session_start();
-require __DIR__ . '/../models/car.php';
+    require_once(__DIR__.'/../models/user.php');
+    require_once(__DIR__.'/../models/db.php');
+    session_start();
+    require __DIR__ . '/../models/car.php';
+    require __DIR__ . '/../models/sql.php';
+    $sql = new Sql($conn);
 
-if (!isset($_SESSION['role'])) {
-    header('Location: login.php?vissza=' . urlencode($_SERVER['REQUEST_URI']));
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
     exit;
 }
-
-$autok = Car::osszes();
+//?vissza=' . urlencode($_SERVER['REQUEST_URI'])
+#region
+/*$autok = Car::osszes();
 
 $valasztottId = (int) ($_GET['auto_id'] ?? 0);
 $atvetel = $_GET['atvetel'] ?? '';
@@ -30,9 +35,11 @@ foreach ($autok as $a) {
 $extrak = [
     'gyerekules' => ['nev' => 'Gyerekülés',    'ar' => 2000, 'ikon' => 'fa-baby'],
 ];
-
+*/
+#endregion
 $pageTitle = 'Foglalás';
 $pageCss = 'kolcsonzes.css';
+$autok = $sql->AutokListaja();
 include __DIR__ . '/../includes/header.php';
 ?>
 
@@ -51,14 +58,17 @@ include __DIR__ . '/../includes/header.php';
                 <label>Autó
                     <select name="auto_id" id="auto" required>
                         <option value="">Válassz autót…</option>
-                        <?php foreach ($autok as $a): ?>
-                            <option value="<?= e($a->getId()) ?>" <?= $a->getId() === $valasztottId ? 'selected' : '' ?>>
-                                <?= e($a->getTeljesNev()) ?> – <?= number_format($a->getAr(), 0, ',', ' ') ?> Ft/nap
+                        <?php foreach ($autok as $auto): ?>
+                           
+                            <option value="<?= htmlspecialchars($auto->getRndsz()) ?> ">
+                                <?= htmlspecialchars($auto->getTeljesNev()) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </label>
-
+                 <?php /*<option value="<?= e($a->getId()) ?>" <?= $a->getId() === $valasztottId ? 'selected' : '' ?>>
+                                <?= e($a->getTeljesNev()) ?> – <?= number_format($a->getAr(), 0, ',', ' ') ?> Ft/nap
+                            </option>*/ ?>
                 <div class="form-row">
                     <label>Átvétel
                         <input type="date" id="atvetel" name="atvetel" value="<?= e($atvetel) ?>" min="<?= $ma ?>" required>
