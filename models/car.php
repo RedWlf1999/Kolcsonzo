@@ -50,7 +50,7 @@ class Car{
     public function getLeiras(): string     {return $this->leiras;}
 
     public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
-
+#region
     /*public static function osszes(): array {
         return [
             new Car(rendszam: 'test1', marka: 'teszt', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
@@ -91,5 +91,5 @@ class Car{
         return null;
     }
         */
-
+#endregion
 }

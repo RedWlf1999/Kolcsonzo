@@ -4,24 +4,35 @@
     session_start();
     require __DIR__ . '/../models/car.php';
     require __DIR__ . '/../models/sql.php';
+    require_once(__DIR__.'/../models/helyek.php');
+    require_once(__DIR__.'/../models/extra.php');
+    
     $sql = new Sql($conn);
 
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
-//?vissza=' . urlencode($_SERVER['REQUEST_URI'])
-#region
-/*$autok = Car::osszes();
-
-$valasztottId = (int) ($_GET['auto_id'] ?? 0);
-$atvetel = $_GET['atvetel'] ?? '';
-$leadas  = $_GET['leadas'] ?? '';
+//$extrak = ['gyerekules' => ['nev' => 'Gyerekülés',    'ar' => 2000, 'ikon' => 'fa-baby'],];
+$extrakListaja=$sql->Extrak();
 $ma = date('Y-m-d');
-
 $legkesobbiSzuletes = date('Y-m-d', strtotime('-21 years'));
 
 $legkesobbiJogsi = date('Y-m-d', strtotime('-1 year'));
+//?vissza=' . urlencode($_SERVER['REQUEST_URI'])
+#region
+/*$autok = Car::osszes();
+<script>
+
+    const AUTOK = <?= json_encode($autokJs, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+</script>
+<script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
+$valasztottId = (int) ($_GET['auto_id'] ?? 0);
+$atvetel = $_GET['atvetel'] ?? '';
+$leadas  = $_GET['leadas'] ?? '';
+
+
+
 
 $autokJs = [];
 foreach ($autok as $a) {
@@ -32,14 +43,21 @@ foreach ($autok as $a) {
     ];
 }
 
-$extrak = [
-    'gyerekules' => ['nev' => 'Gyerekülés',    'ar' => 2000, 'ikon' => 'fa-baby'],
-];
+
 */
 #endregion
 $pageTitle = 'Foglalás';
 $pageCss = 'kolcsonzes.css';
+
+//tömbök
 $autok = $sql->AutokListaja();
+$atvetelihelyek = $sql->AtveteliHelyek();
+
+
+
+
+
+
 include __DIR__ . '/../includes/header.php';
 ?>
 
@@ -71,18 +89,22 @@ include __DIR__ . '/../includes/header.php';
                             </option>*/ ?>
                 <div class="form-row">
                     <label>Átvétel
-                        <input type="date" id="atvetel" name="atvetel" value="<?= e($atvetel) ?>" min="<?= $ma ?>" required>
+                        <input type="date" id="atvetel" name="atvetel" value="<?= isset($_POST["atvetel"]) ?>" min="<?= $ma ?>" required>
                     </label>
                     <label>Leadás
-                        <input type="date" id="leadas" name="leadas" value="<?= e($leadas) ?>" min="<?= $ma ?>" required>
+                        <input type="date" id="leadas" name="leadas" value="<?= isset( $_POST["leadas"] ) ?>" min="<?= $ma ?>" required>
                     </label>
                 </div>
 
                 <label>Átvételi hely
                     <select name="hely" required>
-                        <option value="belvaros">Budapest – Belváros</option>
-                        <option value="repuloter">Budapest – Liszt Ferenc repülőtér</option>
-                        <option value="gyor">Győr</option>
+                        <option value="">Hol szeretnéd átvenni?</option>
+                        <?php foreach ($atvetelihelyek as $hely): ?>
+                           
+                            <option value="<?= htmlspecialchars($hely->getID()) ?> ">
+                                <?= htmlspecialchars($hely->getHely()) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </label>
             </section>
@@ -90,12 +112,12 @@ include __DIR__ . '/../includes/header.php';
             <section class="form-section">
                 <h2><span class="step">2</span> Extrák</h2>
                 <div class="extras">
-                    <?php foreach ($extrak as $kulcs => $extra): ?>
+                    <?php foreach ($extrakListaja as  $extra): ?>
                         <label class="extra">
-                            <input type="checkbox" name="extrak[]" value="<?= e($kulcs) ?>" data-ar="<?= e($extra['ar']) ?>">
-                            <i class="fa-solid <?= e($extra['ikon']) ?>"></i>
-                            <span class="extra-name"><?= e($extra['nev']) ?></span>
-                            <span class="extra-price">+<?= number_format($extra['ar'], 0, ',', ' ') ?> Ft/nap</span>
+                            <input type="checkbox" name="extrak[]" value="<?= $extra->getID() ?>" data-ar="<?= $extra->getAr() ?>">
+                            <i class="fa-solid <?= $extra->getIkon() ?>"></i>
+                            <span class="extra-name"><?= $extra->getNev(); ?></span>
+                            <span class="extra-price">+<?= number_format($extra->getAr(), 0, ',', ' ') ?> Ft/nap</span>
                         </label>
                     <?php endforeach; ?>
                 </div>
@@ -105,7 +127,7 @@ include __DIR__ . '/../includes/header.php';
                 <h2><span class="step">3</span> Személyes adatok</h2>
                 <div class="form-row">
                     <label>Teljes név
-                        <input type="text" name="nev" value="<?= e($_SESSION['name'] ?? '') ?>" required>
+                        <input type="text" name="nev" value = <?= $_SESSION["user"]->getFullnev() ?>  required>
                     </label>
                     <label>Születési dátum
                         <input type="date" name="szuletesi_datum" max="<?= $legkesobbiSzuletes ?>" required>
@@ -114,19 +136,19 @@ include __DIR__ . '/../includes/header.php';
                 </div>
                 <div class="form-row">
                     <label>Telefonszám
-                        <input type="tel" name="telefon" placeholder="+36 30 123 4567" required>
+                        <input type="tel" name="telefon" placeholder="+36 30 123 4567" value = <?= $_SESSION["user"]->getTelefonszam() ?> required >
                     </label>
                     <label>E-mail
-                        <input type="email" name="email" required>
+                        <input type="email" name="email" value = <?= $_SESSION["user"]->getEmail() ?> required>
                     </label>
                 </div>
                 <div class="form-row form-row-3">
                     <label>Irányítószám
-                        <input type="text" name="iranyitoszam" pattern="[0-9]{4}" maxlength="4"
+                        <input type="text" id="irsz" name="iranyitoszam" pattern="[0-9]{4}" maxlength="4"
                                placeholder="1234" title="4 számjegy" required>
                     </label>
                     <label>Település
-                        <input type="text" name="telepules" required>
+                        <input type="text" id="telep" name="telepules" required>
                     </label>
                     <label>Utca, házszám
                         <input type="text" name="cim" required>
@@ -187,11 +209,29 @@ include __DIR__ . '/../includes/header.php';
         </aside>
     </form>
 </main>
-
 <script>
+    const irszInput = document.getElementById('irsz');
+    const varosInput = document.getElementById('telep');
 
-    const AUTOK = <?= json_encode($autokJs, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+    irszInput.addEventListener('blur', function() {
+        const irsz = irszInput.value.trim();
+
+        // Csak akkor indítunk lekérdezést, ha 4 számjegyből áll
+        if (/^\d{4}$/.test(irsz)) {
+            fetch('../models/varos_keres.php?irsz=' + irsz)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.varos) {
+                        varosInput.value = data.varos;
+                    } else {
+                        varosInput.value = '';
+                        alert('Nincs ilyen irányítószám az adatbázisban!');
+                    }
+                })
+                .catch(error => console.error('Hiba történt:', error));
+        }
+    });
 </script>
-<script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
 
+<script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

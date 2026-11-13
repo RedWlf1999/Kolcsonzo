@@ -12,6 +12,10 @@ class User{
         $this->email=$email;
         $this->telefonszam=$telefonszam;
     }
+    public function getFullnev(): string      {return ($this->vnev.' '.$this->knev); }
+    public function getEmail(): string      {return $this->email;}
+    public function getTelefonszam(): string     {return $this->telefonszam;}
+    
     public function IdoPontFogalalasa(){
 
     }
