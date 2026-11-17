@@ -1,9 +1,14 @@
 <?php
 $pageTitle = 'Járművek';
 $pageCss = 'jarmuvek.css';
+require __DIR__ . '/../models/sql.php';
 require __DIR__ . '/../models/car.php';
+require_once(__DIR__.'/../models/user.php');
+require_once(__DIR__.'/../models/db.php');
+$sql= new Sql($conn);
 
-$autok = Car::osszes();
+
+$autok = $sql->AutokListaja();
 $kereses   = trim($_GET['kereses'] ?? '');
 $kategoria = $_GET['kategoria'] ?? '';
 $valto     = $_GET['valto'] ?? '';
@@ -123,7 +128,7 @@ include __DIR__ . '/../includes/header.php';
     <?php else: ?>
         <div class="car-grid">
             <?php foreach ($talalatok as $auto): ?>
-                <?php $link = 'jarmu.php?' . http_build_query(['id' => $auto->getId(), 'atvetel' => $atvetel, 'leadas' => $leadas]); ?>
+                <?php $link = 'jarmu.php?' . http_build_query(['rndsz' => $auto->getRndsz(), 'atvetel' => $atvetel, 'leadas' => $leadas]); ?>
                 <a href="<?= e($link) ?>" class="car-card">
                     <div class="car-card-head">
                         <div>

@@ -1,9 +1,10 @@
 <?php
 require_once __DIR__ . '/car.php';
+require_once(__DIR__.'/db.php');
 
 class Booking {
     private int $id;
-    private int $autoId;
+    private string $rndsz;
     private string $nev;
     private string $email;
     private string $atvetel;
@@ -11,13 +12,14 @@ class Booking {
     private string $hely;
     private string $statusz;
     private string $letrehozva;
+    
 
     public function __construct(
-        int $id, int $autoId, string $nev, string $email, string $atvetel,
+        int $id, string $rndsz, string $nev, string $email, string $atvetel,
         string $leadas, string $hely, string $statusz, string $letrehozva
     ) {
         $this->id = $id;
-        $this->autoId = $autoId;
+        $this->rndsz = $rndsz;
         $this->nev = $nev;
         $this->email = $email;
         $this->atvetel = $atvetel;
@@ -29,7 +31,7 @@ class Booking {
 
     //Getterek
     public function getId(): int            { return $this->id; }
-    public function getAutoId(): int        { return $this->autoId; }
+    public function getAutoRndsz(): string        { return $this->rndsz; }
     public function getNev(): string        { return $this->nev; }
     public function getEmail(): string      { return $this->email; }
     public function getAtvetel(): string    { return $this->atvetel; }
@@ -40,7 +42,33 @@ class Booking {
 
     // A foglalt autó
     public function getAuto(): ?Car {
-        return Car::keres($this->autoId);
+        $rndsz=$this->getAutoRndsz();
+        global $conn;
+        $stmt = mysqli_prepare($conn,"SELECT * FROM cars 
+                                INNER JOIN automarka on cars.MarkaID = automarka.id 
+                                INNER JOIN kategoriak on cars.kategoriaID = kategoriak.id
+                                INNER JOIN valtotipusok on cars.valtoID = valtotipusok.id
+                                INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id
+                                 WHERE Rendszam = ?");
+        mysqli_stmt_bind_param($stmt,"s",$rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        return new Car(
+            $row['Rendszam'],
+            $row['Marka'],
+            $row['Modell'],
+            $row['kategoria'],
+            $row['kep'],
+            (int)$row['Ar'],
+            (int)$row['ulesek'],
+            (int)$row['csomagter'],
+            $row['Tipus'],
+            $row['tipus'],
+            (int)$row['gyartasiEv'],
+            (float)$row['fogyasztas'],
+            $row['leiras'],
+        );
     }
 
     // Hány napra szól a foglalás
@@ -89,35 +117,35 @@ class Booking {
     // ===== Ál-adatok =====
     public static function osszes(): array {
         return [
-            new Booking(id: 1, autoId: 3, nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
+            new Booking(id: 1, rndsz: "DEF354", nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
                         atvetel: self::nap(5), leadas: self::nap(9), hely: 'belvaros',
                         statusz: 'fuggoben', letrehozva: self::nap(-1)),
 
-            new Booking(id: 2, autoId: 5, nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
+            new Booking(id: 2, rndsz: "DEF354", nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
                         atvetel: self::nap(20), leadas: self::nap(23), hely: 'repuloter',
                         statusz: 'jovahagyva', letrehozva: self::nap(-4)),
 
-            new Booking(id: 3, autoId: 1, nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
+            new Booking(id: 3, rndsz: "DEF354", nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
                         atvetel: self::nap(-30), leadas: self::nap(-26), hely: 'belvaros',
                         statusz: 'lezarva', letrehozva: self::nap(-40)),
 
-            new Booking(id: 4, autoId: 2, nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
+            new Booking(id: 4, rndsz: "DEF354", nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
                         atvetel: self::nap(-60), leadas: self::nap(-58), hely: 'gyor',
                         statusz: 'lemondva', letrehozva: self::nap(-70)),
 
-            new Booking(id: 5, autoId: 2, nev: 'Kovács Anna', email: 'kovacs.anna@email.hu',
+            new Booking(id: 5, rndsz: "DEF354", nev: 'Kovács Anna', email: 'kovacs.anna@email.hu',
                         atvetel: self::nap(-1), leadas: self::nap(3), hely: 'repuloter',
                         statusz: 'folyamatban', letrehozva: self::nap(-8)),
 
-            new Booking(id: 6, autoId: 4, nev: 'Nagy Péter', email: 'nagy.peter@email.hu',
+            new Booking(id: 6, rndsz: "DEF354", nev: 'Nagy Péter', email: 'nagy.peter@email.hu',
                         atvetel: self::nap(2), leadas: self::nap(6), hely: 'belvaros',
                         statusz: 'fuggoben', letrehozva: self::nap(0)),
 
-            new Booking(id: 7, autoId: 1, nev: 'Szabó Júlia', email: 'szabo.julia@email.hu',
+            new Booking(id: 7, rndsz: "DEF354", nev: 'Szabó Júlia', email: 'szabo.julia@email.hu',
                         atvetel: self::nap(10), leadas: self::nap(14), hely: 'gyor',
                         statusz: 'jovahagyva', letrehozva: self::nap(-2)),
 
-            new Booking(id: 8, autoId: 5, nev: 'Tóth Gábor', email: 'toth.gabor@email.hu',
+            new Booking(id: 8, rndsz: "DEF354", nev: 'Tóth Gábor', email: 'toth.gabor@email.hu',
                         atvetel: self::nap(-10), leadas: self::nap(-5), hely: 'belvaros',
                         statusz: 'lezarva', letrehozva: self::nap(-15)),
         ];

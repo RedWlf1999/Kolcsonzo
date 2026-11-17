@@ -92,13 +92,23 @@ function checkLogin(){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $results = mysqli_fetch_all($result);
-        echo 2;
+        $user=null;
+        
         if(count($results)==1){
-          echo 0;
+          
             if(password_verify($password,$results[0][4])){
-                $user = new User($results[0][1],$results[0][2],$results[0][3],$results[0][5]);
+                if($results[0][6]===3){
+                    $user = new Customer((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Felhasznalo");
+                    session_regenerate_id(true);
+                    header("Location:kolcsonzes.php");
+                }else{
+                    $user = new Admin((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Admin");
+                    session_regenerate_id(true);
+                    header("Location:admin/index.php");
+                }
                 $_SESSION["user"]= $user;
-                header("Location:kolcsonzes.php");
+               
+               
                 exit;
             }else {
                 return "Hibás e-mail cím vagy jelszó";

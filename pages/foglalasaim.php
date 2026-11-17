@@ -1,6 +1,10 @@
 <?php
+require_once(__DIR__.'/../models/user.php');
 require __DIR__ . '/../includes/auth.php';
-onlyLogon();
+if(!isset($_SESSION["user"])){
+    header("Location: login.php");
+}
+
 
 require __DIR__ . '/../models/booking.php';
 

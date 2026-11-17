@@ -50,6 +50,11 @@ class Car{
     public function getLeiras(): string     {return $this->leiras;}
 
     public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
+
+
+
+
+
 #region
     /*public static function osszes(): array {
         return [
@@ -82,14 +87,7 @@ class Car{
 
     }
 
-        public static function keres(int $id): ?Car {
-        foreach (self::osszes() as $car) {
-            if ($car->getId() === $id) {
-                return $car;
-            }
-        }
-        return null;
-    }
+    
         */
 #endregion
 }

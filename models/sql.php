@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__.'/../models/db.php');
+//require_once(__DIR__.'/../models/car.php');
 
 class Sql{
      public function __construct(private mysqli $db){}
@@ -57,7 +58,24 @@ class Sql{
          }
          return  $extraLista;
     }
+    public function getAuto(string $rndsz):?array{
+        $stmt = mysqli_prepare($this->db,"SELECT * FROM cars WHERE Rendszam = ?");
+        mysqli_stmt_bind_param($stmt,"s",$rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_all($result);
+        return $results;
 
+    }
+    public function getTelepulesID(int $irsz) : int {
+        $stmt = mysqli_prepare($this->db,"SELECT * FROM telepulesek WHERE IRSZ = ?");
+        mysqli_stmt_bind_param($stmt,"i",$irsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_assoc($result);
+        return $results['id'];
+    }
+   
 
 
 

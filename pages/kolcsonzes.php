@@ -22,29 +22,14 @@ $legkesobbiJogsi = date('Y-m-d', strtotime('-1 year'));
 //?vissza=' . urlencode($_SERVER['REQUEST_URI'])
 #region
 /*$autok = Car::osszes();
-<script>
-
-    const AUTOK = <?= json_encode($autokJs, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
-</script>
-<script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
-$valasztottId = (int) ($_GET['auto_id'] ?? 0);
-$atvetel = $_GET['atvetel'] ?? '';
-$leadas  = $_GET['leadas'] ?? '';
 
 
-
-
-$autokJs = [];
-foreach ($autok as $a) {
-    $autokJs[$a->getId()] = [
-        'nev' => $a->getTeljesNev(),
-        'ar'  => $a->getAr(),
-        'kep' => $a->getKep(),
-    ];
-}
 
 
 */
+
+foglalas($sql);
+
 #endregion
 $pageTitle = 'Foglalás';
 $pageCss = 'kolcsonzes.css';
@@ -52,7 +37,19 @@ $pageCss = 'kolcsonzes.css';
 //tömbök
 $autok = $sql->AutokListaja();
 $atvetelihelyek = $sql->AtveteliHelyek();
+$autokJs = [];
+foreach ($sql->AutokListaja() as $a) {
+    $autokJs[$a->getRndsz()] = [
+        'nev' => $a->getTeljesNev(),
+        'ar'  => $a->getAr(),
+        'kep' => $a->getKep(),
+    ];
+}
 
+
+$valasztottId =  $_GET['auto_rndsz'] ?? '';
+$atvetel = $_GET['atvetel'] ?? '';
+$leadas  = $_GET['leadas'] ?? '';
 
 
 
@@ -60,6 +57,10 @@ $atvetelihelyek = $sql->AtveteliHelyek();
 
 include __DIR__ . '/../includes/header.php';
 ?>
+<script>
+
+    const AUTOK = <?= json_encode($autokJs, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?>;
+</script>
 
 <section class="page-banner">
     <h1>Autó foglalása</h1>
@@ -74,19 +75,19 @@ include __DIR__ . '/../includes/header.php';
                 <h2><span class="step">1</span> Autó és időpont</h2>
 
                 <label>Autó
-                    <select name="auto_id" id="auto" required>
+                    <select name="auto_rndsz" id="auto" required>
                         <option value="">Válassz autót…</option>
                         <?php foreach ($autok as $auto): ?>
-                           
-                            <option value="<?= htmlspecialchars($auto->getRndsz()) ?> ">
-                                <?= htmlspecialchars($auto->getTeljesNev()) ?>
+                           <option value="<?= e($auto->getRndsz()) ?>" <?= $auto->getRndsz() === $valasztottId ? 'selected' : '' ?>>
+                                <?= e($auto->getTeljesNev()) ?> – <?= number_format($auto->getAr(), 0, ',', ' ') ?> Ft/nap
                             </option>
+                            
                         <?php endforeach; ?>
                     </select>
                 </label>
-                 <?php /*<option value="<?= e($a->getId()) ?>" <?= $a->getId() === $valasztottId ? 'selected' : '' ?>>
-                                <?= e($a->getTeljesNev()) ?> – <?= number_format($a->getAr(), 0, ',', ' ') ?> Ft/nap
-                            </option>*/ ?>
+                 <?php  /*<option value="<?= htmlspecialchars($auto->getRndsz()) ?> ">
+                                <?= htmlspecialchars($auto->getTeljesNev()) ?>
+                            </option>*/?>
                 <div class="form-row">
                     <label>Átvétel
                         <input type="date" id="atvetel" name="atvetel" value="<?= isset($_POST["atvetel"]) ?>" min="<?= $ma ?>" required>
@@ -205,7 +206,7 @@ include __DIR__ . '/../includes/header.php';
                 <strong id="osszesito-osszeg">–</strong>
             </div>
 
-            <button type="submit" class="btn-accent-full">Foglalás véglegesítése</button>
+            <button type="submit" class="btn-accent-full" name="submit">Foglalás véglegesítése</button>
         </aside>
     </form>
 </main>
@@ -234,4 +235,28 @@ include __DIR__ . '/../includes/header.php';
 </script>
 
 <script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php
+include __DIR__ . '/../includes/footer.php'; 
+function foglalas(Sql $sql){
+    if(isset($_POST["submit"])){
+        
+        $rndsz = $_POST["auto_rndsz"];
+        $mettol =  $_POST["atvetel"];
+        $meddig = $_POST["leadas"];
+        $atvetel = $_POST["hely"];
+        $telepulesid = $sql->getTelepulesID($_POST["iranyitoszam"]);
+        $cim = $_POST["cim"];
+        $megjegyzes = $_POST["megjegyzes"]??'';
+        $_SESSION["user"]->AutoFogalalasa(
+                              $rndsz,
+                              $mettol,
+                              $meddig,
+                              $atvetel,
+                              $telepulesid,
+                              $cim,
+                              $megjegyzes);
+
+        
+    }
+}
+

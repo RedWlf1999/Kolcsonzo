@@ -78,7 +78,7 @@ function checkRegisztracio(){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $results = mysqli_fetch_all($result);
-        $user = new User($results[0][1],$results[0][2],$results[0][3],$results[0][5]);
+        $user = new User((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5],'Felhasznalo');
         $_SESSION["user"]= $user;
         header("Location:kolcsonzes.php");
             

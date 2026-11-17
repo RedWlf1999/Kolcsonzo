@@ -4,9 +4,11 @@ onlyAdmin();
 
 require __DIR__ . '/../../models/car.php';
 require __DIR__ . '/../../models/booking.php';
-
-$autok = Car::osszes();
-$foglalasok = Booking::osszes();
+require __DIR__ . '/../../models/sql.php';
+require_once(__DIR__.'/../../models/db.php');
+$sql = new Sql($conn);
+$autok = $sql->AutokListaja();
+$foglalasok = [];
 
 $kiadva = 0;
 $fuggoben = 0;
