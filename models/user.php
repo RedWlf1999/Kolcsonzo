@@ -1,6 +1,6 @@
 <?php 
 require_once(__DIR__.'/../models/db.php');
-class User{
+abstract class User{
     
     private int $id;
     private string $vnev;
@@ -19,6 +19,8 @@ class User{
         $this->jogosultsag=$jogosultsag;
     }
     public function getFullnev(): string      {return ($this->vnev.' '.$this->knev); }
+    public function getVnev(): string      {return $this->vnev;}
+    public function getKnev(): string      {return $this->knev;}
     public function getEmail(): string      {return $this->email;}
     public function getTelefonszam(): string     {return $this->telefonszam;}
     public function getJog(): string     {return $this->jogosultsag;}
@@ -37,10 +39,20 @@ class User{
 
 }
 class Customer extends User{//3 default
-    private string $szemelyig_utlevel="";
-    private string $jogositvany="";
-    public function __construct(int $id,string $vnev,string $knev,string $email, string $telefonszam, string $jogosultsag){
+    private string $szemelyig_utlevel;
+    private string $jogositvany;
+    public function __construct(int $id,
+                                string $vnev,
+                                string $knev,
+                                string $email, 
+                                string $telefonszam,
+                                string $jogosultsag,
+                                string $szemelyig_utlevel,
+                                string $jogositvany
+                                ){
         parent::__construct( $id,$vnev, $knev, $email, $telefonszam,$jogosultsag);
+        $this->szemelyig_utlevel=$szemelyig_utlevel;
+        $this->jogositvany=$jogositvany;
 
     }
     public function getSzemelyJogositvany(): string     {return $this->szemelyig_utlevel;}

@@ -69,8 +69,9 @@ function checkRegisztracio(){
             array_push($errors,"Ez az e-mail cím már foglalt!");
         }else{
             $hash_pass=password_hash($password1,PASSWORD_BCRYPT);
-            $stmt = mysqli_prepare($conn,"INSERT INTO user (VNev, KNev, email, password, telszam) VALUES (?,?,?,?,?)");
-            mysqli_stmt_bind_param($stmt,"sssss",$vnev,$knev,$email,$hash_pass,$telszam);
+            $uresmezo="";
+            $stmt = mysqli_prepare($conn,"INSERT INTO user (VNev, KNev, email, password, telszam, szemigazolvanyszam,jogositvanyszam) VALUES (?,?,?,?,?,)");
+            mysqli_stmt_bind_param($stmt,"sssssss",$vnev,$knev,$email,$hash_pass,$telszam,$uresmezo,$uresmezo);
             mysqli_stmt_execute($stmt);
 
         $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE email = ?");
@@ -78,8 +79,7 @@ function checkRegisztracio(){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $results = mysqli_fetch_all($result);
-        $user = new User((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5],'Felhasznalo');
-        $_SESSION["user"]= $user;
+        $user = new Customer((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Felhasznalo", $results[0][6],$results[0][7]);
         header("Location:kolcsonzes.php");
             
             
