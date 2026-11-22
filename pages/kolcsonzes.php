@@ -37,7 +37,7 @@ $pageTitle = 'Foglalás';
 $pageCss = 'kolcsonzes.css';
 
 //tömbök
-$autok = $sql->AutokListaja();
+$autok=[];
 $atvetelihelyek = $sql->AtveteliHelyek();
 $autokJs = [];
 foreach ($sql->AutokListaja() as $a) {
@@ -52,7 +52,11 @@ foreach ($sql->AutokListaja() as $a) {
 $valasztottId =  $_GET['auto_rndsz'] ?? '';
 $atvetel = $_GET['atvetel'] ?? '';
 $leadas  = $_GET['leadas'] ?? '';
-
+if ($atvetel !== '' && $leadas !== '' && $atvetel <= $leadas) {
+    $autok = $sql->SzabadAutok($atvetel, $leadas);
+} else {
+    $autok = $sql->AutokListaja();
+}
 
 
 
@@ -75,9 +79,18 @@ include __DIR__ . '/../includes/header.php';
 
             <section class="form-section">
                 <h2><span class="step">1</span> Autó és időpont</h2>
+                 <div class="form-row">
+                    <label>Átvétel
+                        <input type="date" id="atvetel" name="atvetel" value="<?= htmlspecialchars($atvetel??$_POST["atvetel"]) ?>" min="<?= $ma ?>" required>
+                    </label>
+                    <label>Leadás
+                        <input type="date" id="leadas" name="leadas" value="<?= htmlspecialchars($leadas??$_POST["leadas"]) ?>" min="<?= $ma ?>" required>
+                    </label>
+                </div>
 
                 <label>Autó
-                    <select name="auto_rndsz" id="auto" required>
+                   
+                     <select name="auto_rndsz" id="auto" <?= ($atvetel === '' || $leadas === '')? 'disabled' : '' ?> required>
                         <option value="">Válassz autót…</option>
                         <?php foreach ($autok as $auto): ?>
                            <option value="<?= e($auto->getRndsz()) ?>" <?= $auto->getRndsz() === $valasztottId ? 'selected' : '' ?>>
@@ -86,19 +99,14 @@ include __DIR__ . '/../includes/header.php';
                             
                         <?php endforeach; ?>
                     </select>
+                     <script>
+                    
+                    </script>
                 </label>
                  <?php  /*<option value="<?= htmlspecialchars($auto->getRndsz()) ?> ">
                                 <?= htmlspecialchars($auto->getTeljesNev()) ?>
                             </option>*/?>
-                <div class="form-row">
-                    <label>Átvétel
-                        <input type="date" id="atvetel" name="atvetel" value="<?= isset($_POST["atvetel"]) ?>" min="<?= $ma ?>" required>
-                    </label>
-                    <label>Leadás
-                        <input type="date" id="leadas" name="leadas" value="<?= isset( $_POST["leadas"] ) ?>" min="<?= $ma ?>" required>
-                    </label>
-                </div>
-
+               
                 <label>Átvételi hely
                     <select name="hely" required>
                         <option value="">Hol szeretnéd átvenni?</option>
@@ -234,27 +242,39 @@ include __DIR__ . '/../includes/header.php';
                 .catch(error => console.error('Hiba történt:', error));
         }
     });
-</script>
+   </script>
+  
 
 <script src="/Kolcsonzo/assets/js/kolcsonzes.js"></script>
+
+<script>
+    const datumAtvetel = document.getElementById('atvetel');
+    const datumLeadas = document.getElementById('leadas');
+    const autoValaszto = document.getElementById('auto');
+
+    // 1. Oldalbetöltéskor CSAK az autón futtatjuk le a kolcsonzes.js-t (ez nem tölti újra az oldalt!)
+    const voltDisabled = autoValaszto.disabled;
+    autoValaszto.disabled = false;
+    autoValaszto.dispatchEvent(new Event('change'));
+    autoValaszto.disabled = voltDisabled;
+
+    // 2. CSAK EZUTÁN kötjük rá a dátumokra az újratöltő függvényt, hogy csak valódi felhasználói kattintásra fusson le
+    function datumValtozott() {
+        if (datumAtvetel.value !== '' && datumLeadas.value !== '') {
+            const kivalasztottAuto = autoValaszto.value || "<?= htmlspecialchars($valasztottId) ?>";
+            window.location.href = `?auto_rndsz=${kivalasztottAuto}&atvetel=${datumAtvetel.value}&leadas=${datumLeadas.value}`;
+        }
+    }
+
+    datumAtvetel.addEventListener('change', datumValtozott);
+    datumLeadas.addEventListener('change', datumValtozott);
+</script>
 <?php
 include __DIR__ . '/../includes/footer.php'; 
 function foglalas(Sql $sql){
     global $user;
     if(isset($_POST["submit"])){
         
-        $rndsz = $_POST["auto_rndsz"];
-        $mettol =  $_POST["atvetel"];
-        $meddig = $_POST["leadas"];
-        $atvetel = $_POST["hely"];
-        $telepulesid = $sql->getTelepulesID($_POST["iranyitoszam"]);
-        $cim = $_POST["cim"];
-        $megjegyzes = $_POST["megjegyzes"]??'';
-        $vnev =$user->getVnev();
-        $knev = $user->getKnev();
-        $okmany = $user->getSzemelyUtlevel();
-        $jogositvany = $user->getJogositvany();
-        $telefonszam = $user->getTelefonszam();
         $user->AutoFogalalasa(
                               $_POST["auto_rndsz"],
                               $_POST["atvetel"],
@@ -263,11 +283,7 @@ function foglalas(Sql $sql){
                               $sql->getTelepulesID($_POST["iranyitoszam"]),
                               $_POST["cim"],
                               $_POST["megjegyzes"]??'',
-                              $user->getVnev(),
-                              $user->getKnev(),
-                              $user->getSzemelyUtlevel(),
-                              $user->getJogositvany(),
-                              $user->getTelefonszam()
+                              $_POST["extrak"]
                               );
 
         Header("Location:foglalasaim.php");

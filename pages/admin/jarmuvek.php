@@ -76,7 +76,7 @@ include __DIR__ . '/../../includes/header.php';
                                 <td><?= e($auto->getUzemanyag()) ?></td>
                                 <td><?= e($auto->getEv()) ?></td>
                                 <td class="col-actions">
-                                    <a href="jarmu-szerkesztes.php?id=<?= e($auto->getRndsz()) ?>" class="btn-sm">
+                                    <a href="jarmu-szerkesztes.php?rndsz=<?= e($auto->getRndsz()) ?>" class="btn-sm">
                                         <i class="fa-solid fa-pen"></i> Szerkesztés
                                     </a>
                                     <form method="post" class="inline-form"

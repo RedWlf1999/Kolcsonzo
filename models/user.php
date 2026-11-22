@@ -56,7 +56,14 @@ class Customer extends User{//3 default
     public function setTelefonszam(string $adat):void   { $this->telefonszam=$adat;}
 
 
-    public function AutoFogalalasa(string $rndsz, String $mettol, string $meddig, int $atvetelihely, int $telepulesId, string $cim, string $megjegyzes){
+    public function AutoFogalalasa(string $rndsz, 
+                                    String $mettol, 
+                                    string $meddig, 
+                                    int $atvetelihely, 
+                                    int $telepulesId, 
+                                    string $cim, 
+                                    string $megjegyzes,
+                                    array $extrakListaja){
         global $conn;
         $id = $this->getID();
         $vnev = $this->getVnev();
@@ -95,8 +102,31 @@ class Customer extends User{//3 default
                                     $telefonszam
                                     );
         mysqli_stmt_execute($stmt);
+        
+        if (count($extrakListaja) > 0) {
+            $ujFoglalasId = (int)mysqli_insert_id($conn);
+            $stmtExtra = mysqli_prepare($GLOBALS["conn"], "INSERT INTO foglalas_extrak (foglalasID, extraID) VALUES (?, ?)");
+            
+            foreach ($extrakListaja as $extraId) {
+                $extraIdInt = (int)$extraId;
+                mysqli_stmt_bind_param($stmtExtra, "ii", $ujFoglalasId, $extraIdInt);
+                mysqli_stmt_execute($stmtExtra);
+                }
+            }
 
     
+    }
+    public function FoglalasLemondasa(string $foglalasId){
+            $userId = $this->getID();
+            $stmtExtra = mysqli_prepare($GLOBALS["conn"], "DELETE FROM foglalas_extrak WHERE foglalasID=?");
+            mysqli_stmt_bind_param($stmtExtra, "i", $foglalasId);
+            mysqli_stmt_execute($stmtExtra);
+            // A userID = ? feltétel garantálja, hogy más foglalását ne tudja törölni!
+            $stmt = mysqli_prepare($GLOBALS["conn"], "DELETE FROM foglalasok WHERE id = ? AND userID = ?");
+            mysqli_stmt_bind_param($stmt, "ii", $foglalasId, $userId);
+            mysqli_stmt_execute($stmt);
+            
+            
     }
     public function AdatokModositasa(){
         $vnev = $this->getVnev();
@@ -145,11 +175,7 @@ class Customer extends User{//3 default
     }
 }
 
-class Worker extends User{//2
-    public function __construct(int $id,string $vnev,string $knev,string $email, string $telefonszam, string $jogosultsag){
-        parent::__construct($id,$vnev, $knev, $email, $telefonszam,$jogosultsag);
-    }
-}
+
 
 class Admin extends User{//1
     public function __construct(int $id,string $vnev,string $knev,string $email, string $telefonszam, string $jogosultsag){

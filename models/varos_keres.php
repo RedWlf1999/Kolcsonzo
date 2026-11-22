@@ -5,7 +5,7 @@ require_once(__DIR__.'/../models/db.php');
 if (isset($_GET['irsz'])) {
     $irsz = $_GET['irsz'];
     
-    // Adatbázis kapcsolat (a saját adataiddal)
+    
     global $conn;
     
     $sql = "SELECT telepules FROM telepulesek WHERE IRSZ = ? LIMIT 1";

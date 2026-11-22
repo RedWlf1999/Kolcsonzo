@@ -34,6 +34,7 @@ if(isset($_SESSION['user'])) {
         <link rel="stylesheet" href="/Kolcsonzo/assets/css/layout.css">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        
 
         <?php if (!empty($pageCss)): ?>
     <link rel="stylesheet" href="/Kolcsonzo/assets/css/<?= $pageCss ?>">

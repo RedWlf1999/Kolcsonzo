@@ -81,7 +81,7 @@ include __DIR__ . '/../includes/header.php';
 
 
                 <form method="get" action="kolcsonzes.php">
-                    <input type="hidden" name="auto_id" value="<?= e($auto->getRndsz()) ?>">
+                    <input type="hidden" name="auto_rndsz" value="<?= e($auto->getRndsz()) ?>">
 
                     <label>Átvétel
                         <input type="date" id="atvetel" name="atvetel" value="<?= e($atvetel) ?>" min="<?= date('Y-m-d') ?>">

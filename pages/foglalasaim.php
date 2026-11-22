@@ -1,7 +1,10 @@
 <?php
 require_once(__DIR__.'/../models/user.php');
+require_once(__DIR__.'/../models/db.php');
+session_start();
+$user=$_SESSION["user"];
 require __DIR__ . '/../includes/auth.php';
-if(!isset($_SESSION["user"])){
+if(!isset($user)){
     header("Location: login.php");
 }
 
@@ -10,7 +13,10 @@ require __DIR__ . '/../models/booking.php';
 
 $uzenet = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lemondas_id'])) {
-    $uzenet = 'Ez ál-adat, a lemondás még nem mentődik el.';
+    $user->FoglalasLemondasa($_POST['lemondas_id']);
+   Header("Location:foglalasaim.php");
+   exit;
+
 }
 
 $ma = date('Y-m-d');
@@ -98,4 +104,4 @@ include __DIR__ . '/../includes/header.php';
     <?php endif; ?>
 </main>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; 

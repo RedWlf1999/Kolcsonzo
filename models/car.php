@@ -50,7 +50,39 @@ class Car{
     public function getLeiras(): string     {return $this->leiras;}
 
     public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
-
+    public static function Keres(string $rndsz){
+         $sql = "SELECT * FROM cars 
+                                INNER JOIN automarka on cars.MarkaID = automarka.id 
+                                INNER JOIN kategoriak on cars.kategoriaID = kategoriak.id
+                                INNER JOIN valtotipusok on cars.valtoID = valtotipusok.id
+                                INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id
+                                WHERE cars.Rendszam=?";
+        $stmt = mysqli_prepare($GLOBALS["conn"], $sql);
+        mysqli_stmt_bind_param($stmt, "s", $rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        $auto=null;
+        while($row =  mysqli_fetch_assoc($result)){
+                
+            $auto = new Car(
+                $row['Rendszam'],
+                $row['Marka'],
+                $row['Modell'],
+                $row['kategoria'],
+                $row['kep'],
+                (int)$row['Ar'],
+                (int)$row['ulesek'],
+                (int)$row['csomagter'],
+                $row['Tipus'],
+                $row['tipus'],
+                (int)$row['gyartasiEv'],
+                (float)$row['fogyasztas'],
+                $row['leiras'],
+            );
+        }
+        return $auto;
+    }
 
 
 
