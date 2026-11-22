@@ -98,7 +98,7 @@ function checkLogin(){
           
             if(password_verify($password,$results[0][4])){
                 if($results[0][6]===3){
-                    $user = new Customer((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Felhasznalo", $results[0][6],$results[0][7]);
+                    $user = new Customer((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Felhasznalo", $results[0][7],$results[0][8]);
                     session_regenerate_id(true);
                     header("Location:kolcsonzes.php");
                 }else{

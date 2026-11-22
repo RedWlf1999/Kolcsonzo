@@ -114,9 +114,10 @@ class Booking {
         return date('Y-m-d', strtotime($eltolas . ' days'));
     }
 
-    // ===== Ál-adatok =====
+    // ===== Foglalás adatok =====
     public static function osszes(): array {
-        return [
+    #region    
+    /*return [
             new Booking(id: 1, rndsz: "DEF354", nev: 'Teszt Elek', email: 'teszt.elek@email.hu',
                         atvetel: self::nap(5), leadas: self::nap(9), hely: 'belvaros',
                         statusz: 'fuggoben', letrehozva: self::nap(-1)),
@@ -148,8 +149,36 @@ class Booking {
             new Booking(id: 8, rndsz: "DEF354", nev: 'Tóth Gábor', email: 'toth.gabor@email.hu',
                         atvetel: self::nap(-10), leadas: self::nap(-5), hely: 'belvaros',
                         statusz: 'lezarva', letrehozva: self::nap(-15)),
-        ];
-    }
+        ];*/
+        #endregion
+        $sql = "SELECT foglalasok.id, userID, cars.Rendszam, Mikortol, Meddig, Letrehozva, hely, szamlazasi_cim, megjegyzes, statusz, foglalasok.VNev, foglalasok.KNev, Okmany, foglalasok.Jogositvany, email  FROM foglalasok 
+                                INNER JOIN telepulesek on foglalasok.telepulesID = telepulesek.id
+                                INNER JOIN user on foglalasok.userID = user.id
+                                INNER JOIN cars on foglalasok.Rendszam = cars.Rendszam
+                                INNER JOIN atvetelihelyek on foglalasok.atvetelihelyID = atvetelihelyek.id";
+        $stmt = mysqli_prepare($GLOBALS["conn"], $sql);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $foglalasok= [];
+        
+        while($row =  mysqli_fetch_assoc($result)){
+            $foglalasok[] = new Booking(
+                (int)$row['id'],   
+                $row['Rendszam'],
+                $row['VNev'].' '.$row["KNev"],
+                $row['email'],
+                $row['Mikortol'],
+                $row['Meddig'],
+                $row['hely'],
+                $row['statusz'],
+                $row['Letrehozva']
+            );
+        }
+        return $foglalasok;
+       
+   
+    
+        }
 
     public static function keres(int $id): ?Booking {
         foreach (self::osszes() as $foglalas) {

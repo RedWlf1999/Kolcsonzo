@@ -52,13 +52,14 @@ if(isset($_SESSION['user'])) {
                         <a href="/Kolcsonzo/pages/jarmuvek.php" class="<?= aktivMenu(['/Kolcsonzo/pages/jarmuvek.php', '/Kolcsonzo/pages/jarmu.php']) ?>">Járművek</a>
                         <a href="/Kolcsonzo/pages/kolcsonzes.php" class="<?= aktivMenu(['/Kolcsonzo/pages/kolcsonzes.php']) ?>">Kölcsönzés</a>
                         <a href="/Kolcsonzo/pages/foglalasaim.php" class="<?= aktivMenu(['/Kolcsonzo/pages/foglalasaim.php']) ?>">Foglalásaim</a>
-                        <a href="/Kolcsonzo/pages/adatmodositas.php" class="<?= aktivMenu(['/Kolcsonzo/pages/adatmodositas.php']) ?>">Adatmódosítás</a>
+                        
                         
                     <?php endif; ?> 
                 </nav>
 
                 <div class="user-menu">
                     <?php if ($szerepKor): ?>
+                        <a href="/Kolcsonzo/pages/adatmodositas.php" class="<?= aktivMenu(['/Kolcsonzo/pages/adatmodositas.php']) ?>">Adataim</a>
                         <span><i class="fa-solid fa-user"></i> <?= $bejelentkezettNev ?></span>
                         <a href="/Kolcsonzo/pages/logout.php" class="btn-outline">Kijelentkezés</a>
                     <?php else: ?>

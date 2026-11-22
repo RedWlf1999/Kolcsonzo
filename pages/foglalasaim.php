@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['lemondas_id'])) {
 }
 
 $ma = date('Y-m-d');
-$foglalasok = Booking::felhasznaloFoglalasai($_SESSION['name'] ?? '');
+$foglalasok = Booking::felhasznaloFoglalasai($_SESSION['user']->getFullnev() ?? '');
 
 $kozelgok = [];
 $korabbiak = [];
@@ -43,7 +43,7 @@ include __DIR__ . '/../includes/header.php';
 <main class="page">
     <div class="my-head">
         <h1>Foglalásaim</h1>
-        <a href="jarmuvek.php" class="btn-primary"><i class="fa-solid fa-plus"></i> Új foglalás</a>
+        <a href="kolcsonzes.php" class="btn-primary"><i class="fa-solid fa-plus"></i> Új foglalás</a>
     </div>
 
     <?php if ($uzenet !== ''): ?>

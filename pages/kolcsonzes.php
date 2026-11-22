@@ -1,7 +1,9 @@
 <?php
     require_once(__DIR__.'/../models/user.php');
     require_once(__DIR__.'/../models/db.php');
+    
     session_start();
+    $user=$_SESSION["user"];
     require __DIR__ . '/../models/car.php';
     require __DIR__ . '/../models/sql.php';
     require_once(__DIR__.'/../models/helyek.php');
@@ -161,11 +163,11 @@ include __DIR__ . '/../includes/header.php';
                 <h2><span class="step">4</span> Okmányok</h2>
                 <div class="form-row">
                     <label>Személyi igazolvány / útlevél száma
-                        <input type="text" name="szemelyi_szam" placeholder="123456AB"
+                        <input type="text" name="szemelyi_szam" placeholder="123456AB" value=<?= $user->getSzemelyUtlevel() ?>
                                pattern="[A-Za-z0-9]{6,9}" title="6–9 karakter, csak betű és szám" required>
                     </label>
                     <label>Jogosítvány száma
-                        <input type="text" name="jogsi_szam" placeholder="AB123456"
+                        <input type="text" name="jogsi_szam" placeholder="AB123456"  value=<?= $user->getJogositvany() ?>
                                pattern="[A-Za-z0-9]{6,9}" title="6–9 karakter, csak betű és szám" required>
                     </label>
                 </div>
@@ -238,6 +240,7 @@ include __DIR__ . '/../includes/header.php';
 <?php
 include __DIR__ . '/../includes/footer.php'; 
 function foglalas(Sql $sql){
+    global $user;
     if(isset($_POST["submit"])){
         
         $rndsz = $_POST["auto_rndsz"];
@@ -247,16 +250,27 @@ function foglalas(Sql $sql){
         $telepulesid = $sql->getTelepulesID($_POST["iranyitoszam"]);
         $cim = $_POST["cim"];
         $megjegyzes = $_POST["megjegyzes"]??'';
-        $_SESSION["user"]->AutoFogalalasa(
-                              $rndsz,
-                              $mettol,
-                              $meddig,
-                              $atvetel,
-                              $telepulesid,
-                              $cim,
-                              $megjegyzes);
+        $vnev =$user->getVnev();
+        $knev = $user->getKnev();
+        $okmany = $user->getSzemelyUtlevel();
+        $jogositvany = $user->getJogositvany();
+        $telefonszam = $user->getTelefonszam();
+        $user->AutoFogalalasa(
+                              $_POST["auto_rndsz"],
+                              $_POST["atvetel"],
+                              $_POST["leadas"],
+                              $_POST["hely"],
+                              $sql->getTelepulesID($_POST["iranyitoszam"]),
+                              $_POST["cim"],
+                              $_POST["megjegyzes"]??'',
+                              $user->getVnev(),
+                              $user->getKnev(),
+                              $user->getSzemelyUtlevel(),
+                              $user->getJogositvany(),
+                              $user->getTelefonszam()
+                              );
 
-        
+        Header("Location:foglalasaim.php");
     }
 }
 

@@ -75,7 +75,7 @@ class Sql{
         $results = mysqli_fetch_assoc($result);
         return $results['id'];
     }
-   
+     
 
 
 
