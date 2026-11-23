@@ -45,13 +45,13 @@ $bejelentkezettNev = $_SESSION['name'] ?? '';
                         <a href="/Kolcsonzo/pages/jarmuvek.php" class="<?= aktivMenu(['/Kolcsonzo/pages/jarmuvek.php', '/Kolcsonzo/pages/jarmu.php']) ?>">Járművek</a>
                         <a href="/Kolcsonzo/pages/kolcsonzes.php" class="<?= aktivMenu(['/Kolcsonzo/pages/kolcsonzes.php']) ?>">Kölcsönzés</a>
                         <a href="/Kolcsonzo/pages/foglalasaim.php" class="<?= aktivMenu(['/Kolcsonzo/pages/foglalasaim.php']) ?>">Foglalásaim</a>
-                        <a href="#">Kapcsolat</a>
+                        <a href="/Kolcsonzo/pages/kapcsolat.php" class="<?= aktivMenu(['/Kolcsonzo/pages/kapcsolat.php']) ?>">Kapcsolat</a>
                     <?php endif; ?> 
                 </nav>
 
                 <div class="user-menu">
                     <?php if ($szerepKor): ?>
-                        <span><i class="fa-solid fa-user"></i> <?= $bejelentkezettNev ?></span>
+                        <a href="/Kolcsonzo/pages/adatmodositas.php" class="user-name <?= aktivMenu(['/Kolcsonzo/pages/adatmodositas.php']) ?>"><i class="fa-solid fa-user"></i> <?= e($bejelentkezettNev) ?></a>
                         <a href="/Kolcsonzo/pages/logout.php" class="btn-outline">Kijelentkezés</a>
                     <?php else: ?>
                         <a href="/Kolcsonzo/pages/login.php">Bejelentkezés</a>
