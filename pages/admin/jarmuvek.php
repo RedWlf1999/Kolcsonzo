@@ -3,6 +3,10 @@ require __DIR__ . '/../../includes/auth.php';
 onlyAdmin();
 
 require __DIR__ . '/../../models/car.php';
+require __DIR__ . '/../../models/db.php';
+require __DIR__ . '/../../models/sql.php';
+
+$sql = new Sql($conn);
 
 $uzenet = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['torles_id'])) {
@@ -11,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['torles_id'])) {
 
 $kereses = trim($_GET['kereses'] ?? '');
 $autok = [];
-foreach (Car::osszes() as $auto) {
+foreach ($sql->AutokListaja() as $auto) {
     if ($kereses === '' || mb_stripos($auto->getTeljesNev(), $kereses) !== false) {
         $autok[] = $auto;
     }
@@ -72,12 +76,12 @@ include __DIR__ . '/../../includes/header.php';
                                 <td><?= e($auto->getUzemanyag()) ?></td>
                                 <td><?= e($auto->getEv()) ?></td>
                                 <td class="col-actions">
-                                    <a href="jarmu-szerkesztes.php?id=<?= e($auto->getId()) ?>" class="btn-sm">
+                                    <a href="jarmu-szerkesztes.php?rndsz=<?= e($auto->getRndsz()) ?>" class="btn-sm">
                                         <i class="fa-solid fa-pen"></i> Szerkesztés
                                     </a>
                                     <form method="post" class="inline-form"
                                           onsubmit="return confirm(<?= e(json_encode('Biztosan törlöd: ' . $auto->getTeljesNev() . '?', JSON_UNESCAPED_UNICODE)) ?>);">
-                                        <input type="hidden" name="torles_id" value="<?= e($auto->getId()) ?>">
+                                        <input type="hidden" name="torles_id" value="<?= e($auto->getRndsz()) ?>">
                                         <button type="submit" class="btn-sm btn-danger">
                                             <i class="fa-solid fa-trash"></i> Törlés
                                         </button>

@@ -1,6 +1,6 @@
 <?php
 class Car{
-    private int $id;
+    private string $rendszam;
     private string $marka;
     private string $modell;
     private string $kategoria;
@@ -11,15 +11,15 @@ class Car{
     private string $valto;
     private string $uzemanyag;
     private int $ev;
-    private string $fogyasztas;
+    private float $fogyasztas;
     private string $leiras;
 
     public function __construct(
-        int $id, string $marka, string $modell, string $kategoria, string $kep,
+        string $rendszam, string $marka, string $modell, string $kategoria, string $kep,
         int $ar, int $ulesek, int $csomagter, string $valto, string $uzemanyag,
-        int $ev, string $fogyasztas, string $leiras
+        int $ev, float $fogyasztas, string $leiras
     ) {
-        $this->id = $id;
+        $this->rendszam = $rendszam;
         $this->marka = $marka;
         $this->modell = $modell;
         $this->kategoria = $kategoria;
@@ -35,7 +35,7 @@ class Car{
     }
 
     //Getterek
-    public function getId(): int            {return $this->id; }
+    public function getRndsz(): string      {return $this->rendszam; }
     public function getMarka(): string      {return $this->marka;}
     public function getModell(): string     {return $this->modell;}
     public function getKategoria(): string  {return $this->kategoria;}
@@ -46,35 +46,72 @@ class Car{
     public function getValto(): string      {return $this->valto;}
     public function getUzemanyag(): string  {return $this->uzemanyag;}
     public function getEv(): int            {return $this->ev;}
-    public function getFogyasztas(): string {return $this->fogyasztas;}
+    public function getFogyasztas(): float {return $this->fogyasztas;}
     public function getLeiras(): string     {return $this->leiras;}
 
-    public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell; }
+    public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
+    public static function Keres(string $rndsz){
+         $sql = "SELECT * FROM cars 
+                                INNER JOIN automarka on cars.MarkaID = automarka.id 
+                                INNER JOIN kategoriak on cars.kategoriaID = kategoriak.id
+                                INNER JOIN valtotipusok on cars.valtoID = valtotipusok.id
+                                INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id
+                                WHERE cars.Rendszam=?";
+        $stmt = mysqli_prepare($GLOBALS["conn"], $sql);
+        mysqli_stmt_bind_param($stmt, "s", $rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        $auto=null;
+        while($row =  mysqli_fetch_assoc($result)){
+                
+            $auto = new Car(
+                $row['Rendszam'],
+                $row['Marka'],
+                $row['Modell'],
+                $row['kategoria'],
+                $row['kep'],
+                (int)$row['Ar'],
+                (int)$row['ulesek'],
+                (int)$row['csomagter'],
+                $row['Tipus'],
+                $row['tipus'],
+                (int)$row['gyartasiEv'],
+                (float)$row['fogyasztas'],
+                $row['leiras'],
+            );
+        }
+        return $auto;
+    }
 
-    public static function osszes(): array {
+
+
+
+#region
+    /*public static function osszes(): array {
         return [
-            new Car(id: 1, marka: 'teszt', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test1', marka: 'teszt', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 12000, ulesek: 5, csomagter: 380, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2022, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 2, marka: 'teszt2', modell: 'teszt2', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test2', marka: 'teszt2', modell: 'teszt2', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 15000, ulesek: 5, csomagter: 400, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2024, fogyasztas: '7,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 3, marka: 'teszt3', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test3', marka: 'teszt3', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 12000, ulesek: 5, csomagter: 380, valto: 'Automata', uzemanyag: 'Dízel',
                     ev: 2022, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
-            new Car(id: 4, marka: 'teszt4', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test4', marka: 'teszt4', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 10000, ulesek: 5, csomagter: 380, valto: 'Manuális', uzemanyag: 'Benzin',
                     ev: 2020, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.'),
 
 
-            new Car(id: 5, marka: 'teszt5', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
+            new Car(rendszam: 'test5', marka: 'teszt5', modell: 'teszt', kategoria: 'Kompakt', kep: 'placeholder_picture.png',
                     ar: 20000, ulesek: 5, csomagter: 380, valto: 'Automata', uzemanyag: 'Dízel',
                     ev: 2026, fogyasztas: '5,2 l/100 km',
                     leiras: 'tesztElek.')
@@ -82,13 +119,7 @@ class Car{
 
     }
 
-        public static function keres(int $id): ?Car {
-        foreach (self::osszes() as $car) {
-            if ($car->getId() === $id) {
-                return $car;
-            }
-        }
-        return null;
-    }
-
+    
+        */
+#endregion
 }

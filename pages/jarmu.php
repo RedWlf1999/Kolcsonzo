@@ -1,8 +1,11 @@
 <?php
 require __DIR__ . '/../models/car.php';
-
-$id = (int) ($_GET['id'] ?? 0);
-$auto = Car::keres($id);
+require_once __DIR__ . '/../models/sql.php';
+require_once(__DIR__.'/../models/db.php');
+$sql = new Sql($conn);
+$rndsz = ($_GET['rndsz'] ?? '');
+$autoLista = $sql->AutokListaja();
+$auto = keres($rndsz, $autoLista);
 
 $atvetel = $_GET['atvetel'] ?? '';
 $leadas  = $_GET['leadas'] ?? '';
@@ -29,7 +32,7 @@ include __DIR__ . '/../includes/header.php';
                 <div class="car-detail-image">
                     <img src="/Kolcsonzo/assets/pics/cars/<?= e($auto->getKep()) ?>" alt="<?= e($auto->getTeljesNev()) ?>">
                 </div>
-
+               
                 <p class="car-category"><?= e($auto->getKategoria()) ?></p>
                 <h1><?= e($auto->getTeljesNev()) ?> <span class="car-year"><?= e($auto->getEv()) ?></span></h1>
 
@@ -78,7 +81,7 @@ include __DIR__ . '/../includes/header.php';
 
 
                 <form method="get" action="kolcsonzes.php">
-                    <input type="hidden" name="auto_id" value="<?= e($auto->getId()) ?>">
+                    <input type="hidden" name="auto_rndsz" value="<?= e($auto->getRndsz()) ?>">
 
                     <label>Átvétel
                         <input type="date" id="atvetel" name="atvetel" value="<?= e($atvetel) ?>" min="<?= date('Y-m-d') ?>">
@@ -108,3 +111,14 @@ include __DIR__ . '/../includes/header.php';
 </main>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php
+function keres(string $rndsz, array $lista): ?Car {
+        //$sql = new Sql($conn);
+        foreach ($lista as $car) {
+            if ($car->getRndsz() === $rndsz) {
+                return $car;
+            }
+        }
+        return null;
+    }
+

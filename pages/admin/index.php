@@ -1,11 +1,15 @@
 <?php
+require __DIR__ . '/../../models/user.php';
 require __DIR__ . '/../../includes/auth.php';
 onlyAdmin();
 
 require __DIR__ . '/../../models/car.php';
 require __DIR__ . '/../../models/booking.php';
-
-$autok = Car::osszes();
+require __DIR__ . '/../../models/sql.php';
+require_once(__DIR__.'/../../models/db.php');
+$user=$_SESSION["user"];
+$sql = new Sql($conn);
+$autok = $sql->AutokListaja();
 $foglalasok = Booking::osszes();
 
 $kiadva = 0;
@@ -39,7 +43,7 @@ include __DIR__ . '/../../includes/header.php';
     <div class="admin-head">
         <div>
             <h1>Áttekintés</h1>
-            <p>Üdv, <?= e($_SESSION['name'] ?? 'Admin') ?>! Itt látod a kölcsönző aktuális állapotát.</p>
+            <p>Üdv, <?= e($user->getFullnev() ?? 'Admin') ?>! Itt látod a kölcsönző aktuális állapotát.</p>
         </div>
     </div>
 

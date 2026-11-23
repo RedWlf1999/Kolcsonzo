@@ -2,12 +2,13 @@
 require __DIR__ . '/../../includes/auth.php';
 onlyAdmin();
 
-require __DIR__ . '/../../models/car.php';
+require_once __DIR__ . '/../../models/car.php';
+require_once __DIR__ . '/../../models/sql.php';
 
 
-$id = (int) ($_GET['id'] ?? 0);
-$auto = $id > 0 ? Car::keres($id) : null;
-$ujAuto = ($id === 0);
+$rndsz =  $_GET['rndsz'] ?? '';
+$auto = $rndsz > 0 ? Car::Keres($rndsz) : null;
+$ujAuto = ($rndsz === '');
 
 
 $uzenet = '';
@@ -28,7 +29,7 @@ $ev         = $auto ? $auto->getEv() : date('Y');
 $fogyasztas = $auto ? $auto->getFogyasztas() : '';
 $leiras     = $auto ? $auto->getLeiras() : '';
 
-$kategoriak = ['Kisautó', 'Kompakt', 'Kombi', 'Egyterű', 'SUV', 'Prémium'];
+$kategoriak = Sql::Kategoriak();
 
 function kivalasztva($ertek, $aktualis) {
     return $ertek === $aktualis ? 'selected' : '';
@@ -106,7 +107,7 @@ include __DIR__ . '/../../includes/header.php';
                     </select>
                 </label>
                 <label>Fogyasztás
-                    <input type="text" name="fogyasztas" value="<?= e($fogyasztas) ?>" placeholder="pl. 5,2 l/100 km">
+                    <input type="text" name="fogyasztas" value="<?= e($fogyasztas) ?>" placeholder="pl. 5,2">
                 </label>
             </div>
 

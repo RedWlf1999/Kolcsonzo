@@ -1,11 +1,15 @@
 <?php
+require_once(__DIR__.'/../models/user.php');
+require_once(__DIR__.'/../models/db.php');
 session_start();
-require __DIR__ . '/../includes/teszt-felhasznalok.php';
+//require __DIR__ . '/../includes/teszt-felhasznalok.php';
 
 $error = '';
+if(isset($_POST["submit"])){
+    $error = checkLogin();
+}
 $email = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+/*if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $jelszo = $_POST['password'] ?? '';
     $felhasznalo = tesztBelepes($email, $jelszo);
@@ -29,7 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $error = 'Hibás e-mail vagy jelszó.';
-}
+    
+}*/
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="hu">
@@ -58,16 +66,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="fa-solid fa-lock"></i>
                 <input type="password" name="password" placeholder="Jelszó" required>
             </div>
-            <button type="submit">Bejelentkezés</button>
+            <button type="submit" name="submit">Bejelentkezés</button>
         </form>
         <p class="register-text">
             Még nincs fiókod? <a href="regisztracio.php">Regisztrálj!</a>
         </p>
-        <div class="test-accounts">
+       <!--- <div class="test-accounts">
             <strong>Teszt fiókok</strong>
             <span>Admin: admin@admin.hu / admin</span>
             <span>Felhasználó: user@user.hu / user</span>
-        </div>
+        </div>--->
     </main>
 </body>
 </html>
+<?php
+function checkLogin(){
+        global $conn;
+   
+        $email = trim($_POST["email"] ?? '');
+        $password = $_POST["password"] ?? '';
+      
+        
+        $stmt = mysqli_prepare($conn,"SELECT * FROM user WHERE email = ?");
+        mysqli_stmt_bind_param($stmt,"s",$email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_all($result);
+        $user=null;
+        
+        if(count($results)==1){
+          
+            if(password_verify($password,$results[0][4])){
+                if($results[0][6]===3){
+                    $user = new Customer((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Felhasznalo", $results[0][7],$results[0][8]);
+                    session_regenerate_id(true);
+                    header("Location:kolcsonzes.php");
+                }else{
+                    $user = new Admin((int)$results[0][0],$results[0][1],$results[0][2],$results[0][3],$results[0][5], "Admin");
+                    session_regenerate_id(true);
+                    header("Location:admin/index.php");
+                }
+                $_SESSION["user"]= $user;
+               
+               
+                exit;
+            }else {
+                return "Hibás e-mail cím vagy jelszó";
+            }
+
+         }else{
+            return "Hibás e-mail cím vagy jelszó";
+        }
+
+
+
+
+    
+}

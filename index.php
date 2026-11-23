@@ -1,9 +1,11 @@
 <?php
 require __DIR__ . '/models/car.php';
-
-
+require __DIR__ . '/models/db.php';
+require __DIR__ . '/models/sql.php';
+$sql = new Sql($conn);
+$autok= $sql->Autoklistaja();
 $kategoriak = [];
-foreach (Car::osszes() as $auto) {
+foreach ($autok as $auto) {
     $kategoriak[] = $auto->getKategoria();
 }
 $kategoriak = array_unique($kategoriak);

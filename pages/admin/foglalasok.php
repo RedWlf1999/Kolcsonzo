@@ -1,16 +1,21 @@
 <?php
+require_once __DIR__ . '/../../models/user.php';
 require __DIR__ . '/../../includes/auth.php';
+$user=$_SESSION["user"];
 onlyAdmin();
 
 require __DIR__ . '/../../models/booking.php';
-
+$osszesFoglalas = Booking::osszes();
 $uzenet = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['muvelet'])) {
-    $muveletNeve = $_POST['muvelet'] === 'jovahagyas' ? 'jóváhagyás' : 'elutasítás';
-    $uzenet = 'Ez tesztadat, a ' . $muveletNeve;
+    $muveletNeve = $_POST['muvelet'];
+    $id = $_POST['foglalas_id'];
+    $user->FoglalasStatuszModositas($muveletNeve,$id);
+    $user->StatuszFrissites();
+    $GLOBALS["osszesFoglalas"] = Booking::osszes();
 }
 
-$osszesFoglalas = Booking::osszes();
+
 
 $statuszok = [
     ''            => 'Összes',
@@ -103,7 +108,7 @@ include __DIR__ . '/../../includes/header.php';
                                     <?php if ($f->getStatusz() === 'fuggoben'): ?>
                                         <form method="post" class="inline-form" onclick="event.stopPropagation();">
                                             <input type="hidden" name="foglalas_id" value="<?= e($f->getId()) ?>">
-                                            <button type="submit" name="muvelet" value="jovahagyas" class="btn-sm btn-success">
+                                            <button type="submit" name="muvelet" value="jovahagyva" class="btn-sm btn-success">
                                                 <i class="fa-solid fa-check"></i> Jóváhagyás
                                             </button>
                                             <button type="submit" name="muvelet" value="elutasitas" class="btn-sm btn-danger"
@@ -123,5 +128,6 @@ include __DIR__ . '/../../includes/header.php';
         <?php endif; ?>
     </section>
 </main>
+<?php
 
-<?php include __DIR__ . '/../../includes/footer.php'; ?>
+include __DIR__ . '/../../includes/footer.php'; ?>

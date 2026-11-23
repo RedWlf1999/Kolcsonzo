@@ -3,7 +3,8 @@ require __DIR__ . '/../../includes/auth.php';
 onlyAdmin();
 
 require __DIR__ . '/../../models/booking.php';
-
+require_once(__DIR__.'/../models/user.php');
+session_start();
 $id = (int) ($_GET['id'] ?? 0);
 $foglalas = Booking::keres($id);
 $auto = $foglalas ? $foglalas->getAuto() : null;
@@ -45,7 +46,7 @@ include __DIR__ . '/../../includes/header.php';
                     <img class="detail-car-img" src="/Kolcsonzo/assets/pics/cars/<?= e($auto->getKep()) ?>" alt="">
                     <p class="detail-car-name"><?= e($auto->getTeljesNev()) ?></p>
                     <p class="sub"><?= e($auto->getKategoria()) ?> · <?= e($auto->getValto()) ?> · <?= e($auto->getUzemanyag()) ?></p>
-                    <a href="jarmu-szerkesztes.php?id=<?= e($auto->getId()) ?>" class="btn-sm">
+                    <a href="jarmu-szerkesztes.php?id=<?= e($auto->getRndsz()) ?>" class="btn-sm">
                         <i class="fa-solid fa-pen"></i> Autó szerkesztése
                     </a>
                 <?php else: ?>
