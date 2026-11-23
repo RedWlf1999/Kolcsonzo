@@ -13,6 +13,73 @@ $adatHibak = [];
 $jelszoHibak = [];
 changeData();
 
+require __DIR__ . '/../includes/auth.php';
+onlyLogon();
+
+require __DIR__ . '/../includes/teszt-felhasznalok.php';
+
+$nevReszek = explode(' ', $_SESSION['name'] ?? '', 2);
+$vnev    = $nevReszek[0];
+$knev    = $nevReszek[1] ?? '';
+$email   = $_SESSION['email'] ?? '';
+$telefon = $_SESSION['telefon'] ?? '';
+
+$adatHibak = [];
+$adatSiker = '';
+$jelszoHibak = [];
+$jelszoSiker = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['adatok'])) {
+    $vnev    = trim($_POST['vnev'] ?? '');
+    $knev    = trim($_POST['knev'] ?? '');
+    $email   = trim($_POST['email'] ?? '');
+    $telefon = trim($_POST['telefon'] ?? '');
+
+    if ($vnev === '' || $knev === '') {
+        $adatHibak[] = 'A vezeték- és keresztnév megadása kötelező.';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $adatHibak[] = 'Érvénytelen e-mail cím.';
+    }
+    if ($telefon !== '' && !preg_match('/^\+?[0-9 ]{9,16}$/', $telefon)) {
+        $adatHibak[] = 'A telefonszám formátuma nem megfelelő (pl. +36301234567).';
+    }
+
+    if (count($adatHibak) === 0) {
+        $_SESSION['name']    = $vnev . ' ' . $knev;
+        $_SESSION['email']   = $email;
+        $_SESSION['telefon'] = $telefon;
+        $adatSiker = 'Az adataidat elmentettük.';
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['jelszo_modositas'])) {
+    $jelenlegi = $_POST['jelenlegi_jelszo'] ?? '';
+    $uj        = $_POST['password'] ?? '';
+    $uj2       = $_POST['password2'] ?? '';
+
+    // a bejelentkezett teszt felhasználó megkeresése a szerepköre alapján
+    $tarolt = null;
+    foreach (TESZT_FELHASZNALOK as $f) {
+        if ($f['role'] === $_SESSION['role']) {
+            $tarolt = $f;
+        }
+    }
+
+    if (!$tarolt || !password_verify($jelenlegi, $tarolt['jelszo'])) {
+        $jelszoHibak[] = 'A jelenlegi jelszó nem megfelelő.';
+    }
+    if (strlen($uj) < 8 || !preg_match('/[0-9]/', $uj) || !preg_match('/[!@#$%&*?._-]/', $uj)) {
+        $jelszoHibak[] = 'Az új jelszó legalább 8 karakter legyen, és tartalmazzon számot és speciális karaktert.';
+    }
+    if ($uj !== $uj2) {
+        $jelszoHibak[] = 'A két új jelszó nem egyezik.';
+    }
+
+    if (count($jelszoHibak) === 0) {
+        $jelszoSiker = 'A jelszó módosítása rendben. (Ez ál-adat, az új jelszó még nem mentődik el.)';
+    }
+}
 
 $pageTitle = 'Adataim';
 $pageCss = 'adatmodositas.css';
