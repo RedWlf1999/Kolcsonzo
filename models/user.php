@@ -1,5 +1,6 @@
 <?php 
 require_once(__DIR__.'/../models/db.php');
+//require_once(__DIR__.'/../models/car.php');
 abstract class User{
     
     private int $id;
@@ -103,10 +104,10 @@ class Customer extends User{//3 default
                                     );
         mysqli_stmt_execute($stmt);
         
-        if (count($extrakListaja) > 0) {
-            $ujFoglalasId = (int)mysqli_insert_id($conn);
+        if (!empty($extrakListaja)) {
+            $ujFoglalasId = (int)mysqli_insert_id($GLOBALS["conn"]);
             $stmtExtra = mysqli_prepare($GLOBALS["conn"], "INSERT INTO foglalas_extrak (foglalasID, extraID) VALUES (?, ?)");
-            
+        
             foreach ($extrakListaja as $extraId) {
                 $extraIdInt = (int)$extraId;
                 mysqli_stmt_bind_param($stmtExtra, "ii", $ujFoglalasId, $extraIdInt);
@@ -118,11 +119,9 @@ class Customer extends User{//3 default
     }
     public function FoglalasLemondasa(string $foglalasId){
             $userId = $this->getID();
-            $stmtExtra = mysqli_prepare($GLOBALS["conn"], "DELETE FROM foglalas_extrak WHERE foglalasID=?");
-            mysqli_stmt_bind_param($stmtExtra, "i", $foglalasId);
-            mysqli_stmt_execute($stmtExtra);
-            // A userID = ? feltétel garantálja, hogy más foglalását ne tudja törölni!
-            $stmt = mysqli_prepare($GLOBALS["conn"], "DELETE FROM foglalasok WHERE id = ? AND userID = ?");
+            $stmt = mysqli_prepare($GLOBALS["conn"], "UPDATE  foglalasok
+                                                        SET statusz='lemondva'
+                                                         WHERE foglalasok.id = ? AND userID = ?");
             mysqli_stmt_bind_param($stmt, "ii", $foglalasId, $userId);
             mysqli_stmt_execute($stmt);
             
@@ -202,5 +201,139 @@ class Admin extends User{//1
             WHERE statusz = 'folyamatban' AND Meddig < CURDATE()";
         mysqli_query($GLOBALS["conn"],$sql1);
         mysqli_query($GLOBALS["conn"],$sql2);
+    }
+    public function AutoHozzadasa(string $rndsz,
+                                int $markaid,
+                                string $modell,
+                                int $kategoria,
+                                int $ar,
+                                int $ulesek,
+                                string $kep,
+                                int $csomagter,
+                                int $valtoid,
+                                int $uzemanyadid,
+                                int $gyartas,
+                                float $fogyasztas,
+                                string $leiras):string{
+        $stmt = mysqli_prepare($GLOBALS["conn"],"SELECT * FROM cars WHERE Rendszam = ?");
+        mysqli_stmt_bind_param($stmt,"s",$rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_all($result);
+        if(count($results)==1){
+            return "Ez a rendszám már foglalt";
+        }else{
+           
+        $stmt = mysqli_prepare($GLOBALS["conn"],"INSERT INTO cars (Rendszam, 
+                                                            MarkaID, 
+                                                            Modell, 
+                                                            kategoriaID,
+                                                            ar,
+                                                            ulesek,
+                                                            kep,
+                                                            csomagter,
+                                                            valtoID,
+                                                            uzemanyagID,
+                                                            gyartasiEv,
+                                                            fogyasztas,
+                                                            leiras
+                                                            ) VALUES (
+                                                            ?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        mysqli_stmt_bind_param($stmt,"sisiiisiiiids",
+                                    $rndsz,
+                                    $markaid,
+                                    $modell,
+                                    $kategoria,
+                                    $ar,
+                                    $ulesek,
+                                    $kep,
+                                    $csomagter,
+                                    $valtoid,
+                                    $uzemanyadid,
+                                    $gyartas,
+                                    $fogyasztas,
+                                    $leiras
+                                    );
+        mysqli_stmt_execute($stmt);
+        return "Autó elmentve!";
+        }
+    }
+    public function AutoAdatokFrisstese(
+                                string $regiRendszam,
+                                string $rndsz,
+                                int $markaid,
+                                string $modell,
+                                int $kategoria,
+                                int $ar,
+                                int $ulesek,
+                                string $kep,
+                                int $csomagter,
+                                int $valtoid,
+                                int $uzemanyadid,
+                                int $gyartas,
+                                float $fogyasztas,
+                                string $leiras):string{
+        $stmt = mysqli_prepare($GLOBALS["conn"],"SELECT * FROM cars WHERE Rendszam = ?");
+        mysqli_stmt_bind_param($stmt,"s",$rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_all($result);
+        if(count($results)==1){
+        $stmt = mysqli_prepare($GLOBALS["conn"],"UPDATE cars 
+                                                SET Rendszam=? ,
+                                                            MarkaID=? ,
+                                                            Modell=?  ,
+                                                            kategoriaID=? ,
+                                                            ar=? ,
+                                                            ulesek=? ,
+                                                            kep=? ,
+                                                            csomagter=? ,
+                                                            valtoID=? ,
+                                                            uzemanyagID=? ,
+                                                            gyartasiEv=? ,
+                                                            fogyasztas=? ,
+                                                            leiras=? 
+                                                WHERE Rendszam=?");
+        mysqli_stmt_bind_param($stmt,"sisiiisiiiidss",
+                                    $rndsz,
+                                    $markaid,
+                                    $modell,
+                                    $kategoria,
+                                    $ar,
+                                    $ulesek,
+                                    $kep,
+                                    $csomagter,
+                                    $valtoid,
+                                    $uzemanyadid,
+                                    $gyartas,
+                                    $fogyasztas,
+                                    $leiras,
+                                    $regiRendszam
+                                    );
+        mysqli_stmt_execute($stmt);
+        return "Autó adatai frissítve!";
+        }else{
+            return "Hiba a mentés során";
+        }
+    
+    }
+    public function AutoSoftDel(string $rndsz){
+        $stmt = mysqli_prepare($GLOBALS["conn"],"SELECT * FROM cars WHERE Rendszam = ?");
+        mysqli_stmt_bind_param($stmt,"s",$rndsz);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = mysqli_fetch_all($result);
+        if(count($results)==1){
+            $ujRendszam= $rndsz.'_DEL_'.-time();
+            $stmt = mysqli_prepare($GLOBALS["conn"],"UPDATE cars 
+                                                    SET Rendszam=? , aktiv=0
+                                                    WHERE Rendszam=?");
+            mysqli_stmt_bind_param($stmt,"ss",
+                                        $ujRendszam,
+                                        $rndsz
+                                        
+                                        );
+            mysqli_stmt_execute($stmt);
+        }
     }
 }

@@ -4,11 +4,13 @@ require_once __DIR__ . '/../models/sql.php';
 require_once(__DIR__.'/../models/db.php');
 $sql = new Sql($conn);
 $rndsz = ($_GET['rndsz'] ?? '');
-$autoLista = $sql->AutokListaja();
-$auto = keres($rndsz, $autoLista);
 
+
+$autoLista = $sql->AutokListaja();
 $atvetel = $_GET['atvetel'] ?? '';
 $leadas  = $_GET['leadas'] ?? '';
+
+$auto = keres($rndsz, $autoLista);
 
 $pageTitle = $auto ? $auto->getTeljesNev() : 'Autó nem található';
 $pageCss = 'jarmu.css';

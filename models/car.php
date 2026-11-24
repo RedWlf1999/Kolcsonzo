@@ -11,13 +11,13 @@ class Car{
     private string $valto;
     private string $uzemanyag;
     private int $ev;
-    private float $fogyasztas;
+    private string $fogyasztas;
     private string $leiras;
 
     public function __construct(
         string $rendszam, string $marka, string $modell, string $kategoria, string $kep,
         int $ar, int $ulesek, int $csomagter, string $valto, string $uzemanyag,
-        int $ev, float $fogyasztas, string $leiras
+        int $ev, string $fogyasztas, string $leiras
     ) {
         $this->rendszam = $rendszam;
         $this->marka = $marka;
@@ -46,17 +46,18 @@ class Car{
     public function getValto(): string      {return $this->valto;}
     public function getUzemanyag(): string  {return $this->uzemanyag;}
     public function getEv(): int            {return $this->ev;}
-    public function getFogyasztas(): float {return $this->fogyasztas;}
+    public function getFogyasztas(): string {return $this->fogyasztas;}
     public function getLeiras(): string     {return $this->leiras;}
+    public function setKep(string $adat): void   { $this->kep=$adat;}
 
-    public function getTeljesNev(): string { return $this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ulesek. ' ajtós'; }
+    public function getTeljesNev(): string { return $this->rendszam . ' '.$this->marka . ' ' . $this->modell . ' ' .$this->kategoria. ' '.$this->ev; }
     public static function Keres(string $rndsz){
          $sql = "SELECT * FROM cars 
                                 INNER JOIN automarka on cars.MarkaID = automarka.id 
                                 INNER JOIN kategoriak on cars.kategoriaID = kategoriak.id
                                 INNER JOIN valtotipusok on cars.valtoID = valtotipusok.id
                                 INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id
-                                WHERE cars.Rendszam=?";
+                                WHERE cars.Rendszam=? AND aktiv=1";
         $stmt = mysqli_prepare($GLOBALS["conn"], $sql);
         mysqli_stmt_bind_param($stmt, "s", $rndsz);
         mysqli_stmt_execute($stmt);
@@ -77,7 +78,7 @@ class Car{
                 $row['Tipus'],
                 $row['tipus'],
                 (int)$row['gyartasiEv'],
-                (float)$row['fogyasztas'],
+                $row['fogyasztas'],
                 $row['leiras'],
             );
         }

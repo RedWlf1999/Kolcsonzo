@@ -10,7 +10,8 @@ class Sql{
                                 INNER JOIN automarka on cars.MarkaID = automarka.id 
                                 INNER JOIN kategoriak on cars.kategoriaID = kategoriak.id
                                 INNER JOIN valtotipusok on cars.valtoID = valtotipusok.id
-                                INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id";
+                                INNER JOIN uzemanyagtipusok on cars.uzemanyagID = uzemanyagtipusok.id
+                                WHERE aktiv=1";
         $stmt = mysqli_prepare($this->db, $sql);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
@@ -29,7 +30,7 @@ class Sql{
                 $row['Tipus'],
                 $row['tipus'],
                 (int)$row['gyartasiEv'],
-                (float)$row['fogyasztas'],
+                $row['fogyasztas'],
                 $row['leiras'],
             );
         }
@@ -106,7 +107,7 @@ class Sql{
                 $row['Tipus'],
                 $row['tipus'],
                 (int)$row['gyartasiEv'],
-                (float)$row['fogyasztas'],
+                $row['fogyasztas'],
                 $row['leiras'],
             );
         }
@@ -121,10 +122,23 @@ class Sql{
         $kategoriak=[];
         while($row =  mysqli_fetch_assoc($result)){
                 
-            $kategoriak[] = $row["kategoria"];
+            $kategoriak[$row["id"]] = $row["kategoria"];
         }
         return $kategoriak;
-        //return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        
+    }
+    public static function AutoMarkak(): ?array{
+        $sql = "SELECT * FROM automarka";
+        $stmt = mysqli_prepare($GLOBALS["conn"], $sql);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $markak=[];
+        while($row =  mysqli_fetch_assoc($result)){
+                
+            $markak[$row["id"]] = $row["Marka"];
+        }
+        return $markak;
+        
     }
      
 

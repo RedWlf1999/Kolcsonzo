@@ -274,7 +274,7 @@ include __DIR__ . '/../includes/footer.php';
 function foglalas(Sql $sql){
     global $user;
     if(isset($_POST["submit"])){
-        
+        $extrak = $_POST["extrak"]??[];
         $user->AutoFogalalasa(
                               $_POST["auto_rndsz"],
                               $_POST["atvetel"],
@@ -283,7 +283,7 @@ function foglalas(Sql $sql){
                               $sql->getTelepulesID($_POST["iranyitoszam"]),
                               $_POST["cim"],
                               $_POST["megjegyzes"]??'',
-                              $_POST["extrak"]
+                              $extrak
                               );
 
         Header("Location:foglalasaim.php");

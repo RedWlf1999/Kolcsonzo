@@ -124,6 +124,7 @@ include __DIR__ . '/../../includes/header.php';
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                
             </div>
         <?php endif; ?>
     </section>
