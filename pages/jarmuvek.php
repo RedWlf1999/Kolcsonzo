@@ -8,7 +8,7 @@ require_once(__DIR__.'/../models/db.php');
 $sql= new Sql($conn);
 
 
-$autok = $sql->AutokListaja();
+$autok = [];
 $kereses   = trim($_GET['kereses'] ?? '');
 $kategoria = $_GET['kategoria'] ?? '';
 $valto     = $_GET['valto'] ?? '';
@@ -18,6 +18,17 @@ $arMax     = $_GET['ar_max'] ?? '';
 $rendezes  = $_GET['rendezes'] ?? '';
 $atvetel   = $_GET['atvetel'] ?? '';
 $leadas    = $_GET['leadas'] ?? '';
+
+$atvetel = $_GET['atvetel'] ?? '';
+$leadas  = $_GET['leadas'] ?? '';
+if ($atvetel === '' || $leadas === '') {
+    // Ha még nincs megadva dátum, minden aktív autót megjelenítünk
+    $autok= $sql->AutokListaja();
+} else {
+    // Ha van dátum, csak az adott időszakra szabad autókat kérdezzük le
+    $autok = $sql->SzabadAutok($atvetel, $leadas);
+}
+
 
 $kategoriak = [];
 foreach ($autok as $auto) {

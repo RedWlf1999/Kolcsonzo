@@ -1,16 +1,22 @@
 <?php
-require __DIR__ . '/../../includes/auth.php';
-onlyAdmin();
 
 require __DIR__ . '/../../models/car.php';
 require __DIR__ . '/../../models/db.php';
 require __DIR__ . '/../../models/sql.php';
 
+require_once(__DIR__.'/../../models/user.php');
+require __DIR__ . '/../../includes/auth.php';
+
+
+onlyAdmin();
+$user = $_SESSION["user"];
+
 $sql = new Sql($conn);
 
 $uzenet = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['torles_id'])) {
-    $uzenet = 'Ez ál-adat, a törlés még nem mentődik el.';
+        
+        $user->AutoSoftDel($_POST['torles_id']);
 }
 
 $kereses = trim($_GET['kereses'] ?? '');
@@ -24,6 +30,7 @@ foreach ($sql->AutokListaja() as $auto) {
 $pageTitle = 'Járművek kezelése';
 $pageCss = 'admin.css';
 include __DIR__ . '/../../includes/header.php';
+
 ?>
 
 <main class="page">
